@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   searchBox: {
-    fontFamily: "Inter, sans-serif",
   },
   scoreHeader: {
     marginTop: 20,
@@ -132,6 +131,5 @@ const styles = StyleSheet.create({
   },
   cardSection: {
     padding: 10,
-    fontFamily: "Radley, sans-serif",
   },
 });
