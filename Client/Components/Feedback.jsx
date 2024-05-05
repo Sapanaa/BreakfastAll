@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "stretch",
     margin: "0 auto",
+    height:"100%",
   },
   form: {
     padding: 20,
