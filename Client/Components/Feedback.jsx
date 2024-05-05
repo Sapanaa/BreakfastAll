@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Header from "./Header";
+import Footer from "./Footer";
 import { AirbnbRating } from "react-native-ratings";
 
 const Feedback = () => {
@@ -46,6 +47,7 @@ const Feedback = () => {
           <Text>Cancel</Text>
         </TouchableOpacity>
       </View>
+      <Footer />
     </>
   );
 };
