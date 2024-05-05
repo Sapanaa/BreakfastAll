@@ -1,110 +1,129 @@
-import * as React from "react";
-import {View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
+import Header from "./MostComp/Header";
+import Footer from "./MostComp/Footer";
+import Proff from "../assets/Prof.png"
+
+const ProfileDetail = ({ label, value, onChangeText }) => (
+  <View>
+    <Text style={styles.detailLabel}>{label}</Text>
+    <TextInput
+      style={styles.detailValue}
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={`Enter ${label}`}
+    />
+  </View>
+);
+
+const ImageContainer = ({ source }) => (
+  <Image resizeMode="cover" source={{source}} style={styles.detailImage} />
+);
 
 function MyProfile() {
+  const [username, setUsername] = useState("Paul Alexander");
+  const [email, setEmail] = useState("hello@gmail.com");
+  const [phoneNumber, setPhoneNumber] = useState("43254654657");
+
+  const handleUsernameChange = (text) => setUsername(text);
+  const handleEmailChange = (text) => setEmail(text);
+  const handlePhoneNumberChange = (text) => setPhoneNumber(text);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.profile}>
-        <View style={styles.profileImageContainer}>
-          <Image
-            source={{
-              uri: "https://assets.epicurious.com/photos/647df8cad9749492c4d5d407/1:1/w_1600,c_limit/StrawberryMilkshake_RECIPE_053123_3599.jpg", // Update the image URI here
-            }}
-            style={styles.profileImage}
-          />
-          <Text style={styles.changePicture}>Change Picture</Text>
-        </View>
-        <View style={styles.profileInfo}>
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter username"
-            placeholderTextColor="#999"
-          />
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter email"
-            placeholderTextColor="#999"
-          />
-          <Text style={styles.label}>Phone Number</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter phone number"
-            placeholderTextColor="#999"
-          />
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter password"
-            placeholderTextColor="#999"
-            secureTextEntry={true}
-          />
+    <>
+      <Header heading={"My Profile"} />
+      <View style={styles.container}>
+        <View style={styles.profileSection}>
+          <Image resizeMode="auto" source={Proff} style={styles.profilePic} />
+          <TouchableOpacity style={styles.changePictureButton}>
+            <Text>Change Picture</Text>
+          </TouchableOpacity>
+          <ProfileDetail label="Username" value={username} onChangeText={handleUsernameChange} />
+          <ProfileDetail label="Email ID" value={email} onChangeText={handleEmailChange} />
+          <ProfileDetail label="Phone Number" value={phoneNumber} onChangeText={handlePhoneNumberChange} />
+          <View style={styles.passwordBox}>
+            <Text style={styles.passwordLabel}>Password</Text>
+          </View>
+          <TouchableOpacity style={styles.updateButton}>
+            <Text style={styles.updateButtonText}>Update</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity style={styles.updateButton}>
-        <Text style={styles.updateButtonText}>Update</Text>
-      </TouchableOpacity>
-    </View>
+      <Footer />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    paddingTop: 20,
-  },
-  profile: {
+    backgroundColor: "#FDE7E7",
+    display: "flex",
+    maxWidth: 680,
+    width: "100%",
     flexDirection: "column",
+    alignItems: "stretch",
+    margin: "0 auto",
+  },
+  profileSection: {
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingBottom: 20,
+    paddingTop: 56,
   },
-  profileImageContainer: {
-    marginRight: 20,
+  profilePic: {
+    borderColor: "#FFFFFF",
+    borderWidth: 5,
+    borderRadius: 71,
+    width: 142,
+    height: 142,
   },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  changePictureButton: {
+    marginTop: 4,
+    fontFamily: "Poppins, sans-serif",
   },
-  changePicture: {
-    marginTop: 10,
-    textAlign: "center",
+  detailLabel: {
+    marginTop: 30,
+    fontFamily: "Poppins, sans-serif",
     fontSize: 14,
-    color: "#666",
+    fontWeight: "500",
   },
-  profileInfo: {
-    flex: 1,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 5,
-    marginTop: 10,
-  },
-  input: {
+  detailValue: {
+    fontFamily: "Poppins, sans-serif",
+    borderRadius: 8,
+    borderColor: "#A9A9A9",
     borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 5,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0)",
+    marginTop: 13,
+    padding: 11,
+  },
+  passwordBox: {
+    marginTop: 29,
+    borderRadius: 8,
+    borderColor: "#A9A9A9",
+    borderWidth: 1,
+    backgroundColor: "rgba(0,0,0,0)",
+    height: 40,
+    width: "90%",
+    justifyContent: "center",
+    paddingLeft: 10,
+  },
+  passwordLabel: {
     fontSize: 14,
-    marginBottom: 10,
+    fontWeight: "500",
   },
   updateButton: {
     backgroundColor: "#171F1D",
-    paddingVertical: 15,
-    paddingHorizontal: 30,
+    marginTop: 43,
+    width: 283,
+    alignItems: "center",
+    padding: 13,
     borderRadius: 10,
-    marginTop: 20,
   },
   updateButtonText: {
     color: "#FFF",
     fontSize: 15,
-    fontWeight: "bold",
+    fontWeight: "700",
+    fontFamily: "Poppins, sans-serif",
   },
 });
 

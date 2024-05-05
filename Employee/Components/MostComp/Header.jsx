@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     top: 0,
     width: '100%',
     zIndex: 67,
-    backgroundColor: '#EFC3E8', // Add a background color for the header
+    backgroundColor: '#e0a5a5', // Add a background color for the header
     paddingVertical: 15,
     paddingHorizontal: 20,
     height: '12%',

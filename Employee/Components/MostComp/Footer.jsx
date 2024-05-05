@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    
+    zIndex: 60,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#f476cb', // Add a background color for the footer
+    backgroundColor: '#e5687f', // Add a background color for the footer
     paddingVertical: 10, // Add vertical padding to create space between icons and the edge of the footer
   },
   icon: {

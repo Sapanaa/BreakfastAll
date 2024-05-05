@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
-import Header from "./MostComp/Footer";
-import Footer from "./MostComp/Header";
+import Header from "./MostComp/Header";
+import Footer from "./MostComp/Footer";
 
 const notificationsData = [
   {
