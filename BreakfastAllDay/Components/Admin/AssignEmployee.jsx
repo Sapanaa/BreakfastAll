@@ -50,7 +50,7 @@ const AssignEmployee = () => {
 
   return (
     <>
-    <Header/>
+    <Header heading={"Assign Emp"}/>
 
     <LinearGradient
       colors={['#FBECF8', '#EFC3E8','#E297D6']}

@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import Header from "../Next.jsx/Header";
 
@@ -7,15 +7,76 @@ const SectionTitle = ({ title }) => (
   <Text style={styles.sectionTitle}>{title}</Text>
 );
 
-const StaffItem = ({ name, email, status }) => (
-  <View style={styles.staffItem}>
-    <Text style={styles.staffName}>{name}</Text>
-    <Text style={styles.staffEmail}>{email}</Text>
-    <Text style={styles.staffStatus}>{status}</Text>
-  </View>
-);
+const StaffItem = ({ name, email, status, onRemove }) => {
+  const confirmDelete = () => {
+    Alert.alert(
+      "Confirm Deletion",
+      `Are you sure you want to delete ${name}?`,
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Delete",
+          onPress: () => onRemove()
+        }
+      ],
+      { cancelable: true }
+    );
+  };
+
+  return (
+    <View style={styles.staffItem}>
+      <Text style={styles.staffName}>{name}</Text>
+      <Text style={styles.staffEmail}>{email}</Text>
+      <Text style={styles.staffStatus}>{status}</Text>
+      <TouchableOpacity onPress={confirmDelete}>
+        <Image
+          resizeMode="auto"
+          source={require('../../assets/DeleteI.png')}
+          style={styles.actionIcon}
+        />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const StaffManagement = () => {
+  const [newStaffName, setNewStaffName] = useState('');
+  const [newStaffEmail, setNewStaffEmail] = useState('');
+  const [employees, setEmployees] = useState([
+    { name: "Ana", email: "Ana@hotmail.com", status: "Active" },
+    { name: "Paul", email: "itspaul@yahoo", status: "Active" }
+  ]);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const handleAddStaff = () => {
+    if (newStaffName.trim() !== '' && newStaffEmail.trim() !== '') {
+      const newEmployee = {
+        name: newStaffName.trim(),
+        email: newStaffEmail.trim(),
+        status: "Active"
+      };
+
+      // Update employees state to include the new employee
+      setEmployees([...employees, newEmployee]);
+
+      // Show success message after adding employee
+      setShowSuccessMessage(true);
+
+      // Clear input fields after successful addition
+      setNewStaffName('');
+      setNewStaffEmail('');
+    }
+  };
+
+  const handleRemoveEmployee = (index) => {
+    const updatedEmployees = [...employees];
+    updatedEmployees.splice(index, 1); // Remove 1 element at 'index'
+    setEmployees(updatedEmployees);
+  };
+
   return (
     <>
       <Header heading={'Manage Staffs'}/>
@@ -25,32 +86,39 @@ const StaffManagement = () => {
           colors={['#FBECF8', '#EFC3E8', '#E297D6']}
           style={styles.content}
         >
-          <SectionTitle title="Employee List"   />
-          <StaffItem name="Name" email="Email" status="Status" style={styles.staff}/>
-          <StaffItem name="Ana" email="Ana@hotmail.com" status="Active" style={styles.staff}/>
-          <StaffItem name="Paul" email="itspaul@yahoo" status="Active" style={styles.staff}/>
+          <SectionTitle title="Employee List" />
+          {employees.map((employee, index) => (
+            <StaffItem
+              key={index}
+              name={employee.name}
+              email={employee.email}
+              status={employee.status}
+              onRemove={() => handleRemoveEmployee(index)}
+            />
+          ))}
+          
           <SectionTitle title="Add Staff" />
-          <TextInput style={styles.input} placeholder="Name"  />
-          <TextInput style={styles.input} placeholder="Email"  />
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonText}>ADD</Text></TouchableOpacity>
-          <SectionTitle title="Remove Staff" />
-          <View style={styles.staffActionItem}>
-            <Text style={styles.staffName}>Ana</Text>
-            <View style={styles.staffActionContent}>
-              <Text style={styles.staffEmail}>Ana@hotmail.com</Text>
-              <Image resizeMode="auto" source={{ uri: "https://example.com/path/to/delete/icon", }} style={styles.actionIcon} />
-            </View>
-          </View>
-          <SectionTitle title="Disable Staff" />
-          <View style={styles.staffActionItem}>
-            <Text style={styles.staffName}>Paul</Text>
-            <View style={styles.staffActionContent}>
-              <Text style={styles.staffEmail}>itspaul@yahoo</Text>
-              <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.buttonText}>SELECT</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Name"
+            value={newStaffName}
+            onChangeText={setNewStaffName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={newStaffEmail}
+            onChangeText={setNewStaffEmail}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleAddStaff}>
+            <Text style={styles.buttonText}>ADD</Text>
+          </TouchableOpacity>
+
+          {showSuccessMessage && newStaffName.trim() !== '' && newStaffEmail.trim() !== '' && (
+            <Text style={styles.successMessage}>Staff added successfully!</Text>
+          )}
+
+          {/* Other sections (Remove Staff, Disable Staff) can be added here */}
         </LinearGradient>
       </View>
     </>
@@ -69,8 +137,6 @@ const styles = StyleSheet.create({
   headerTop: {
     backgroundColor: "#FFCEF7",
     minHeight: 86,
-  },
-  staff: {
   },
   content: {
     flex: 1,
@@ -110,30 +176,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
   },
-  staffActionItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderTopWidth: 1,
-    borderTopColor: "rgba(198, 184, 184, 1)",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    backgroundColor: "rgba(253, 231, 231, 0.87)",
-  },
-  staffActionContent: {
-    flexDirection: "row",
-    alignItems: "center",
+  successMessage: {
+    marginTop: 10,
+    color: "#4CAF50",
+    fontSize: 16,
+    textAlign: "center",
   },
   actionIcon: {
-    marginLeft: 10,
     width: 20,
     height: 20,
   },
-  actionButton: {
-    backgroundColor: "rgba(255, 41, 66, 0.84)",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 30,
-  }
 });
 
 export default StaffManagement;

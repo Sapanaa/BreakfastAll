@@ -4,37 +4,37 @@ import Footer from '../Next.jsx/Footer';
 import Header from '../Next.jsx/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const FormInput = ({ label, placeholder }) => (
+const FormInput = ({ name, placeholder }) => (
   <View style={styles.inputContainer}>
-    <Text style={styles.inputLabel}>{label}</Text>
     <TextInput placeholder={placeholder} style={styles.textInput} />
   </View>
 );
 
 const InvitationForm = () => {
   const formFields = [
-    { label: 'Email address', placeholder: 'Enter your email' },
-    { label: 'Enter Token', placeholder: 'Token' },
-    { label: 'Enter Validity', placeholder: 'Validity period' },
+    { name: 'name', placeholder: 'Name' },
+    { name: 'email', placeholder: 'Email Address' },
+    { name: 'token', placeholder: 'Enter token' },
+    { name: 'validity', placeholder: 'Validity period' },
   ];
 
   return (
     <>
-    <Header heading={'Invitations'}/>
-    <LinearGradient
-      colors={['#FBECF8', '#EFC3E8','#E297D6']}
-      style={styles.container}
-    >
-      <Text style={styles.sendInviteText}>Send Invite</Text>
-      {formFields.map((field, index) => (
-        <FormInput key={index} label={field.label} placeholder={field.placeholder} />
-      ))}
-      <TouchableOpacity style={styles.sendButton}>
-        <Text style={styles.sendButtonText}>SEND</Text>
-      </TouchableOpacity>
-    </LinearGradient>
-      <Footer/>
-</>
+      <Header heading={'Invitations'} />
+      <LinearGradient
+        colors={['#FBECF8', '#EFC3E8', '#E297D6']}
+        style={styles.container}
+      >
+        <Text style={styles.sendInviteText}>Send Invite</Text>
+        {formFields.map((field, index) => (
+          <FormInput key={index} name={field.name} placeholder={field.placeholder} />
+        ))}
+        <TouchableOpacity style={styles.sendButton}>
+          <Text style={styles.sendButtonText}>SEND</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+      <Footer />
+    </>
   );
 };
 
@@ -46,11 +46,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
     backgroundImage: 'linear-gradient(120deg, #4c669f, #192f6a)',
-    
   },
-
   sendInviteText: {
     fontSize: 24,
     marginTop: 20,
@@ -61,9 +59,6 @@ const styles = StyleSheet.create({
     marginTop: 26,
     padding: 10,
     width: '60%',
-  },
-  inputLabel: {
-    textAlign: 'center',
   },
   textInput: {
     fontSize: 16,
@@ -83,8 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-
-
 });
 
 export default InvitationForm;

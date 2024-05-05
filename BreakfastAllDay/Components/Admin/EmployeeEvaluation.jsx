@@ -1,13 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet , TextInput} from "react-native";
 import Header from "../Next.jsx/Header";
-
+import { useState } from "react";
+import Footer from "../Next.jsx/Footer";
 const data = [
   { date: "3 March", name: "Ana", score: "2", comment: "Rude" },
   { date: "1 March", name: "Sam", score: "5", comment: "Perfect" },
   { date: "11 March", name: "Paul", score: "4", comment: "Great" },
 ];
-
 
 const ScoreCard = ({ date, name, score, comment }) => (
   <View style={styles.scoreCard}>
@@ -26,56 +26,80 @@ const ScoreCard = ({ date, name, score, comment }) => (
   </View>
 );
 
+const ScoreboardItem = ({ date, tables, ratings }) => (
+  <View style={styles.scoreCard}>
+    <View style={styles.cardSection}>
+      <Text>{date}</Text>
+    </View>
+    <View style={styles.cardSection}>
+      <Text>{tables}</Text>
+    </View>
+    <View style={styles.cardSection}>
+      <Text>{ratings}</Text>
+    </View>
+  </View>
+);
+
 export default function EmployeeEvaluation() {
+  const [searchText, setSearchText] = useState('');
   return (
     <>
-    <Header/>
-    <View style={styles.container}>
+    
+      <Header heading={"Evaluation"} />
+      <View style={styles.container}>
       <View style={styles.searchSection}>
-        <View style={styles.searchBox}>
-          <Text style={styles.tee} >Search</Text>
+  <TextInput
+    style={styles.searchInput}
+    placeholder="Search by name or comment"
+    onChangeText={(text) => setSearchText(text)}
+  />
+</View>
+        <View style={styles.scoreHeader}>
+          <Text>Date</Text>
+          <Text>Name</Text>
+          <Text>Score</Text>
+          <Text>Comments</Text>
         </View>
+        {data.map((item, index) => (
+          <ScoreCard
+            key={index}
+            date={item.date}
+            name={item.name}
+            score={item.score}
+            comment={item.comment}
+          />
+        ))}
+        <View style={styles.scoreHeader}>
+          <Text>Date</Text>
+          <Text>Tables</Text>
+          <Text>Ratings</Text>
+        </View>
+        {/* Example data for the scoreboard */}
+        <ScoreboardItem date="3 March" tables="5" ratings="Excellent" />
+        <ScoreboardItem date="1 March" tables="3" ratings="Good" />
+        <ScoreboardItem date="11 March" tables="4" ratings="Very Good" />
       </View>
-      <View style={styles.scoreHeader}>
-        <Text>Date</Text>
-        <Text>Name</Text>
-        <Text>Score</Text>
-        <Text>Comments</Text>
-      </View>
-      {data.map((item, index) => (
-        <ScoreCard
-          key={index}
-          date={item.date}
-          name={item.name}
-          score={item.score}
-          comment={item.comment}
-        />
-      ))}
-    </View>
+      <Footer/>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 20,
     backgroundColor: "#FBECF8",
     alignItems: "center",
     maxWidth: 480,
     margin: "0 auto",
+    paddingTop: 100,
   },
-  header: {
-    backgroundColor: "#FFCEF7",
-    width: "100%",
-    height: 86,
-  },
-  tee:{
-    color: '#868583',
+  tee: {
+    color: "#868583",
   },
   searchSection: {
-    marginTop: 110,
+    marginTop: 20,
     width: 250,
     borderRadius: 20,
     height: 25,
@@ -86,7 +110,7 @@ const styles = StyleSheet.create({
     fontFamily: "Inter, sans-serif",
   },
   scoreHeader: {
-    marginTop: 68,
+    marginTop: 20,
     width: "100%",
     padding: "0 20px",
     alignItems: "center",
@@ -109,11 +133,5 @@ const styles = StyleSheet.create({
   cardSection: {
     padding: 10,
     fontFamily: "Radley, sans-serif",
-  },
-  footer: {
-    backgroundColor: "#F670C9",
-    width: "100%",
-    height: 87,
-    marginTop: 316,
   },
 });

@@ -1,16 +1,22 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet , TouchableOpacity} from 'react-native';
 import { Octicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Footer() {
+  const handleHomePress = () => {
+    console.log('Home icon pressed');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.footer}>
-        <Octicons name="person" size={24} color="black" style={styles.icon} />
+      
+        {/*<Octicons name="person" size={24} color="black" style={styles.icon} />*/}
+        <TouchableOpacity onPress={handleHomePress}>
         <MaterialCommunityIcons name="home-variant-outline" size={24} color="black" style={styles.icon} />
-        <MaterialIcons name="favorite" size={24} color="black" style={styles.icon} />
+      {/*<MaterialIcons name="favorite" size={24} color="black" style={styles.icon} />*/}
+      </TouchableOpacity>
       </View>
     </View>
   );
