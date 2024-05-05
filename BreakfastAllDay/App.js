@@ -15,14 +15,13 @@ import EmployeeEvaluation from './Components/Admin/EmployeeEvaluation';
 export default function App() {
   return (
     <View style={styles.container}>
+  <AdminLoading/>
   {/* <AdminLogin/>*/}
-  {/*<AdminLoading/>*/}
  {/*<EditAccount />*/}
-  {/*<StaffManagement/>*/}
-  {/*<InvitationForm/>*/}
   {/*<EmployeeEvaluation/>*/}
-<AssignEmployee/>
-
+  {/*<AssignEmployee/>*/}
+  {/* <InvitationForm/>*/}
+   {/*<StaffManagement/>*/}
   
     </View>
   );
