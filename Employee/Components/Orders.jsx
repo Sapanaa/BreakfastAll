@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Header from "./MostComp/Header";
+import Footer from "./MostComp/Footer";
 
 const OrderRow = ({ tableNumber, product, time, status }) => (
   <View style={styles.orderRow}>
@@ -27,13 +29,18 @@ const Orders = () => {
   ];
 
   return (
+    <>
+    <Header/>
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text>&lt;</Text>
-      </View>
+      
       <View style={styles.ordersHeader}>
-        <Text>Pending orders</Text>
-        <Text>Unpaid Orders</Text>
+      <View style={styles.container}>
+            <TouchableOpacity style={styles.button}>
+                <Text style={styles.text}>Pending orders</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+                <Text style={styles.text}>Unpaid Orders</Text>
+            </TouchableOpacity>
       </View>
       <View style={styles.tableHeader}>
         <Text>Table</Text>
@@ -50,10 +57,16 @@ const Orders = () => {
           status={order.status}
         />
       ))}
+      <TouchableOpacity>
  <View style={styles.footer}>
         <Text>Check Notifications</Text>
       </View>
+      </TouchableOpacity>
     </View>
+    </View>
+
+    <Footer/>
+    </>
   );
 };
 
@@ -61,10 +74,11 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "stretch",
-    backgroundColor: "#FFF",
+    backgroundColor: "#f5e2e2",
     display: "flex",
     maxWidth: 480,
     width: "100%",
+    height: "100%",
     flexDirection: "column",
     margin: "0 auto",
   },
@@ -103,9 +117,14 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   footer: {
+
     marginTop: 87,
     padding: 20,
+    width: "50%",
+    borderRadius: 5,
     alignItems: "center",
+    backgroundColor: "#e5687f",
+    left: 80,
   },
 });
 

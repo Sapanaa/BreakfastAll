@@ -3,16 +3,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import Notifications from './Components/Notifications';
 import Orders from './Components/Orders';
 import EvaluationP from './Components/EvaluationP';
-import MyProfile from './Components/profile';
-import MyHome from './Components/Home';
-import MyDashboard from './Components/Dashboard';
-import Mylogin from './Components/login';
-
+import MyProfile from './Components/Profile';
+import DashBoard from './Components/Dashboard1';
+import Status from './Components/Status';
 
 export default function App() {
   return (
     <View style={styles.container}>
-     <MyHome />
+    {/*  <Notifications/>*/}
+    {/*  <Orders/>*/}
+     {/* <EvaluationP/>*/}
+   {/*<MyProfile/>*/}
+  {/* <DashBoard/>*/}
+  <Status/>
+
+   {/*<Orders/>*/}
+
+ {/* <Home/>*/}
       <StatusBar style="auto" />
     </View>
   );

@@ -1,92 +1,99 @@
 import React from "react";
-import { View, StyleSheet, Text,TextInput, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
-function Mylogin() {
+function MyComponent() {
   return (
-    <View style={[styles.container, { backgroundColor: "#F9E7E7" }]}>
-      <View style={styles.innerContainer}>
-        <Text style={styles.title}>Login</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Email Address</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email address"
-            placeholderTextColor="#999"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="*****"
-            placeholderTextColor="#999"
-            secureTextEntry={true}
-          />
-        </View>
-        <TouchableOpacity style={[styles.enterButtonContainer, { backgroundColor: "#7E74BB" }]}>
-          <Text style={styles.enterButtonText}>Login</Text>
-        </TouchableOpacity>
-        <View style={styles.divider} />
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email Address</Text>
+        <Text style={styles.password}>*****</Text>
       </View>
-      <TouchableOpacity style={[styles.enterButtonContainer, { backgroundColor: "#7E74BB", marginTop: 20 }]}>
+      <View style={styles.loginButtonContainer}>
+        <View style={styles.loginButton}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </View>
+      </View>
+      <View style={styles.divider} />
+      <View style={styles.enterButtonContainer}>
         <Text style={styles.enterButtonText}>Enter</Text>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    borderRadius: 50,
+    backgroundColor: "#F9E7E7",
+    maxWidth: 480,
+    width: "100%",
+    paddingHorizontal: 36,
+    paddingVertical: 75,
     alignItems: "center",
-  },
-  innerContainer: {
-    width: "80%",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    borderRadius: 10,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 50,
+    fontFamily: "Rakkas, sans-serif",
+    borderWidth: 1,
+    borderColor: "#000",
+    paddingHorizontal: 20,
   },
   inputContainer: {
-    marginBottom: 20,
+    marginTop: 54,
+    alignItems: "center",
   },
   label: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: "#333",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#999",
-    borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    color: "#333",
-  },
-  divider: {
-    height: 1,
-    backgroundColor: "#999",
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+    borderRadius: 30,
+    padding: 10,
+    fontSize: 17,
+    fontFamily: "Inder, sans-serif",
     marginBottom: 20,
   },
-  enterButtonContainer: {
-    width: "80%",
-    borderRadius: 10,
+  password: {
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+    borderRadius: 30,
+    padding: 10,
+    fontSize: 17,
+    fontFamily: "Inder, sans-serif",
+  },
+  loginButtonContainer: {
+    marginTop: 20,
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 15,
+  },
+  loginButton: {
+    borderRadius: 30,
+    backgroundColor: "#7E74BB",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  loginButtonText: {
+    fontFamily: "Inika, sans-serif",
+    fontSize: 18,
+    color: "#FEFCFC",
+    fontWeight: "700",
+  },
+  divider: {
+    backgroundColor: "rgba(0, 0, 0, 0.10)",
+    marginTop: 20,
+    height: 1,
+    width: "100%",
+  },
+  enterButtonContainer: {
+    marginTop: 165,
+    alignItems: "center",
   },
   enterButtonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "bold",
+    borderRadius: 20,
+    backgroundColor: "#7E74BB",
+    color: "#FEFCFC",
+    paddingVertical: 9,
+    paddingHorizontal: 16,
+    fontSize: 20,
+    fontFamily: "Inika, sans-serif",
+    fontWeight: "700",
   },
 });
 
-
-export default Mylogin;
+export default MyComponent;
