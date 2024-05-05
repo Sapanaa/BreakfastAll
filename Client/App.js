@@ -14,7 +14,7 @@ import MyGoodbye from './Components/Goodbye';
 export default function App() {
   return (
     <View style={styles.container}>
-      <MyFeedback />
+      <MyOrderHistory/>
       <StatusBar style="auto" />
     </View>
   );
