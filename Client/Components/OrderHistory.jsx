@@ -10,29 +10,6 @@ const OrderItem = ({ orderId, date, status, items }) => {
   const totalPaid = status === 'Paid' ? totalOwed : 0;
 
   return (
-<<<<<<< HEAD
-  <>
-  <Header heading="Order History"/>
-    <View style={styles.container}>
-      {/* Header */}
-      
-      {/* Content */}
-      <View style={styles.content}>
-        {/* Order items */}
-        <View style={styles.orderItem}>
-          <Text>Order Id: 12334          Date: 22/12/2023</Text>
-          <Text>Status: Delivered</Text>
-          {/* Product details */}
-          <Text>Product Name                            Price</Text>
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>CheeseBurger</Text>
-            <Text style={styles.productPrice}>€12.34</Text>
-          </View>
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>Coffee</Text>
-            <Text style={styles.productPrice}>€5.36</Text>
-          </View>
-=======
     <View style={styles.orderItem}>
       <View style={styles.orderInfo}>
         <Text style={styles.orderIdText}>Order ID: {orderId}</Text>
@@ -43,7 +20,6 @@ const OrderItem = ({ orderId, date, status, items }) => {
         <View style={styles.productHeader}>
           <Text style={styles.productHeaderItem}>Product Name</Text>
           <Text style={styles.productHeaderItem}>Price</Text>
->>>>>>> b48846bee27f0d48d887c01a945ae13c416941e4
         </View>
         {items.map((item, index) => (
           <View key={index} style={styles.productRow}>

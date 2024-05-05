@@ -12,7 +12,7 @@ import Mylogin from './Components/login';
 export default function App() {
   return (
     <View style={styles.container}>
-     <MyHome />
+     <MyProfile />
       <StatusBar style="auto" />
     </View>
   );
