@@ -1,6 +1,5 @@
 import * as React from "react";
 import { View, StyleSheet, Image,FlatList, Text, TextInput } from "react-native";
-import Header from "./Header";
 import Footer from "./Footer";
 import {data} from "../data";
 import Header from "./Header";
@@ -8,8 +7,6 @@ import Header from "./Header";
 function MyMenu() {
   return (
     <>
-    
-
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Our Menu</Text>

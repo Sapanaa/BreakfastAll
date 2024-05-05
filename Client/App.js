@@ -9,12 +9,12 @@ import MyMenuItem from './Components/MenuItem';
 import MyRequest from './Components/RequestEmployee';
 import MyFeedback from './Components/Feedback';
 import MyGoodbye from './Components/Goodbye';
-import MyDashboard from '../Employee/Components/Dashboard';
+
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <MyGoodbye />
+      <MyMenuItem />
       <StatusBar style="auto" />
     </View>
   );
