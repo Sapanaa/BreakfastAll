@@ -13,11 +13,11 @@ export default function App() {
     <View style={styles.container}>
     {/*  <Notifications/>*/}
     {/*  <Orders/>*/}
-     {/* <EvaluationP/>*/}
+      <EvaluationP/>
    {/*<MyProfile/>*/}
   {/* <DashBoard/>*/}
  {/* <Status/>*/}
-<Login/>
+{/*<Login/>*/}
    {/*<Orders/>*/}
 
  {/* <Home/>*/}
