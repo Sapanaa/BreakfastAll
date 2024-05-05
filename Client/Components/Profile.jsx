@@ -2,6 +2,7 @@ import * as React from "react";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
 import Header from "./Header";
 import Footer from "./Footer";
+import Pro from "../assets/ClientP.png";
 
 function MyProfile() {
   const handleEditProfile = () => {
@@ -30,7 +31,7 @@ function MyProfile() {
           </View>
           <Image
             resizeMode="cover"
-            source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/6c6011e2424229c9789e932c86eda0a4785524e91aa2f62d4d0a229bf4ff041d?" }}
+            source={Pro}
             style={styles.profileImage}
           />
           <TouchableOpacity style={styles.editProfile} onPress={handleEditProfile}>
