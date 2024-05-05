@@ -46,7 +46,7 @@ function MyProfile() {
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
           <View style={styles.employeeRequest}>
-            <Text style={styles.employeeText}>Request Employee</Text>
+            <Text style={styles.employeeText}>Check Order-History</Text>
             <TouchableOpacity style={styles.forwardButton} onPress={handleRequestEmployee}>
               <Text style={styles.forwardButtonText}>&#10132;</Text>
             </TouchableOpacity>
