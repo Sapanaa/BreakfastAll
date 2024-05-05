@@ -6,6 +6,7 @@ import EvaluationP from './Components/EvaluationP';
 import MyProfile from './Components/Profile';
 import DashBoard from './Components/Dashboard1';
 import Status from './Components/Status';
+import Login from './Components/LoginPa';
 
 export default function App() {
   return (
@@ -15,8 +16,8 @@ export default function App() {
      {/* <EvaluationP/>*/}
    {/*<MyProfile/>*/}
   {/* <DashBoard/>*/}
-  <Status/>
-
+ {/* <Status/>*/}
+<Login/>
    {/*<Orders/>*/}
 
  {/* <Home/>*/}
