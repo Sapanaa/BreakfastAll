@@ -11,25 +11,16 @@ function MyMenu() {
     
 
     <View style={styles.container}>
-<<<<<<< HEAD
       <View style={styles.header}>
         <Text style={styles.title}>Our Menu</Text>
       </View>
       <View style={styles.search}>         
-=======
-    <Header heading={"Menu"}/>
-        <View style={styles.search}>
-          
->>>>>>> b48846bee27f0d48d887c01a945ae13c416941e4
           <TextInput
       style={styles.input}
       placeholderTextColor="#999" placeholder="Search"
     />
         </View>
-<<<<<<< HEAD
-=======
       
->>>>>>> b48846bee27f0d48d887c01a945ae13c416941e4
       <Text style={styles.categories}>Brunch Shakes Yummies Desserts</Text>
       <View style={styles.container}>
       <FlatList
@@ -62,15 +53,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   header: {
-<<<<<<< HEAD
-    
-=======
     marginTop: 20,
     alignItems: "center",
     marginBottom: 4,
   },
   title: {
->>>>>>> b48846bee27f0d48d887c01a945ae13c416941e4
     backgroundColor: "#EC9090",
     
   },

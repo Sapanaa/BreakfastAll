@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
 function MyDashboard() {
   return (
@@ -10,15 +11,14 @@ function MyDashboard() {
             <Text>&lt;</Text>
           </View>
           <Text style={styles.title}>Dashboard</Text>
-          <Text style={styles.icon}>🚀</Text>
+          <Ionicons name="person" size={24} color="black" />
         </View>
         <Text style={styles.activeOrders}>Active Orders</Text>
-        <Text style={styles.tableNumber}>Table NO: 3 2min</Text>
-        <Text style={styles.tableNumber}>Table NO: 11 5min</Text>
-        <Text style={styles.tableNumber}>Table NO: 9 1min</Text>
+        <Text style={styles.tableNumber}>Table NO: 3     2min</Text>
+        <Text style={styles.tableNumber}>Table NO: 7     5min</Text>
+        <Text style={styles.tableNumber}>Table NO: 9     1min</Text>
         <View style={styles.notifications}>
           <Text style={styles.notificationText}>Check Notifications</Text>
-          <Text style={styles.notificationIcon}>🔔</Text>
         </View>
       </View>
     </View>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   activeOrders: {
     marginTop: 20,
     backgroundColor: "#FFF",
-    borderRadius: 20,
+    borderRadius: 40,
     padding: 10,
     fontSize: 20,
   },
@@ -77,15 +77,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F37A90",
     marginTop: 20,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 10,
   },
   notificationText: {
     fontSize: 20,
     marginRight: 10,
-  },
-  notificationIcon: {
-    fontSize: 24,
   },
 });
 

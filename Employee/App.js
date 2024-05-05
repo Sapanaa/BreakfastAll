@@ -5,14 +5,13 @@ import Orders from './Components/Orders';
 import EvaluationP from './Components/EvaluationP';
 import MyProfile from './Components/profile';
 import MyHome from './Components/Home';
+import MyDashboard from './Components/Dashboard';
+import Mylogin from './Components/login';
 
 
 export default function App() {
   return (
     <View style={styles.container}>
-      {/*<Notifications/>*/}
-    {/*  <Orders/>*/}
-     {/* <EvaluationP/>*/}
      <MyHome />
       <StatusBar style="auto" />
     </View>

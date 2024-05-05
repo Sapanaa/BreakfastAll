@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import {View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
 
 function MyProfile() {
   return (
@@ -8,7 +8,7 @@ function MyProfile() {
         <View style={styles.profileImageContainer}>
           <Image
             source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/05ea36dc121a4bb6130efd1d0e98b2bf142723d9b7adc54ab365640bf049d2c3?",
+              uri: "https://assets.epicurious.com/photos/647df8cad9749492c4d5d407/1:1/w_1600,c_limit/StrawberryMilkshake_RECIPE_053123_3599.jpg", // Update the image URI here
             }}
             style={styles.profileImage}
           />
@@ -16,18 +16,35 @@ function MyProfile() {
         </View>
         <View style={styles.profileInfo}>
           <Text style={styles.label}>Username</Text>
-          <Text style={styles.value}>Paul</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter username"
+            placeholderTextColor="#999"
+          />
           <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>Hello@gmail.com</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter email"
+            placeholderTextColor="#999"
+          />
           <Text style={styles.label}>Phone Number</Text>
-          <Text style={styles.value}>43254654657</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter phone number"
+            placeholderTextColor="#999"
+          />
           <Text style={styles.label}>Password</Text>
-          {/* Placeholder for password input */}
+          <TextInput
+            style={styles.input}
+            placeholder="Enter password"
+            placeholderTextColor="#999"
+            secureTextEntry={true}
+          />
         </View>
       </View>
-      <View style={styles.updateButton}>
+      <TouchableOpacity style={styles.updateButton}>
         <Text style={styles.updateButtonText}>Update</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -35,12 +52,13 @@ function MyProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#FFF",
+    paddingTop: 20,
   },
   profile: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     paddingHorizontal: 20,
   },
@@ -65,8 +83,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 5,
+    marginTop: 10,
   },
-  value: {
+  input: {
+    borderWidth: 1,
+    borderColor: "#999",
+    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     fontSize: 14,
     marginBottom: 10,
   },
