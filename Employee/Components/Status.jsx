@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
   actionText: {
     color: "#000",
     fontSize: 20,
-    fontFamily: "Radley",
   },
   imageContainer: {
     alignSelf: "center",

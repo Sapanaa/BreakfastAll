@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 50,
-    fontFamily: "Rakkas, sans-serif",
     borderWidth: 1,
     borderColor: "#000",
     paddingHorizontal: 20,
@@ -48,7 +47,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 10,
     fontSize: 17,
-    fontFamily: "Inder, sans-serif",
     marginBottom: 20,
   },
   password: {
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     padding: 10,
     fontSize: 17,
-    fontFamily: "Inder, sans-serif",
   },
   loginButtonContainer: {
     marginTop: 20,
@@ -69,7 +66,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   loginButtonText: {
-    fontFamily: "Inika, sans-serif",
     fontSize: 18,
     color: "#FEFCFC",
     fontWeight: "700",
@@ -91,7 +87,6 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     paddingHorizontal: 16,
     fontSize: 20,
-    fontFamily: "Inika, sans-serif",
     fontWeight: "700",
   },
 });

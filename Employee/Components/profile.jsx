@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
   },
   changePictureButton: {
     marginTop: 4,
-    fontFamily: "Poppins, sans-serif",
   },
   detailLabel: {
     marginTop: 30,
@@ -87,7 +86,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   detailValue: {
-    fontFamily: "Poppins, sans-serif",
     borderRadius: 8,
     borderColor: "#A9A9A9",
     borderWidth: 1,
@@ -123,7 +121,6 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 15,
     fontWeight: "700",
-    fontFamily: "Poppins, sans-serif",
   },
 });
 
