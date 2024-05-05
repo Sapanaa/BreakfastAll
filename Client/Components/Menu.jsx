@@ -2,13 +2,15 @@ import * as React from "react";
 import { View, StyleSheet, Image,FlatList, Text, TextInput } from "react-native";
 import Footer from "./Footer";
 import {data} from "../data";
+import Header from "./Header";
 
 function MyMenu() {
   return (
     <>
+    
+
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Our Menu</Text>
+    <Header heading={"Menu"}/>
         <View style={styles.search}>
           
           <TextInput
@@ -16,14 +18,14 @@ function MyMenu() {
       placeholderTextColor="#999" placeholder="Search"
     />
         </View>
-      </View>
+      
       <Text style={styles.categories}>Brunch Shakes Yummies Desserts</Text>
       <View style={styles.container}>
       <FlatList
         data={data}
         renderItem={({ item }) => <View>
           <Image source={{uri: item.imageUrl}} style={styles.image} />
-          <Text>{item.text}</Text>
+          <Text style={styles.text}>{item.text}</Text>
            </View>}
         keyExtractor={item => item.id}
         numColumns={2}
@@ -39,14 +41,19 @@ function MyMenu() {
 const styles = StyleSheet.create({
   container: {
     flex :1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#fdeaea",
     alignItems: "center",
     paddingHorizontal: 2,
-    marginTop: 25,
+    marginTop: 23,
+    width: "100%",
+  },
+  text:{
+    textAlign: "center",
   },
   header: {
     marginTop: 20,
     alignItems: "center",
+    marginBottom: 4,
   },
   title: {
     backgroundColor: "#EC9090",
@@ -58,7 +65,7 @@ const styles = StyleSheet.create({
   search: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 100,
   },
 
   categories: {

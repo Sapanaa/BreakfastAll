@@ -1,142 +1,140 @@
-import * as React from "react";
-import { View, StyleSheet, Text } from "react-native";
-import Header from "./Header";
-import Footer from "./Footer";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Header from './Header';
+import Footer from './Footer';
 
-function MyOrderHistory() {
+const OrderItem = ({ orderId, date, status, items }) => {
+  // Calculate total amount owed
+  const totalOwed = items.reduce((acc, item) => acc + parseFloat(item.price), 0);
+  // Conditionally calculate total amount paid based on status
+  const totalPaid = status === 'Paid' ? totalOwed : 0;
+
   return (
-  <>
-  <Header/>
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.backButton}>
-          <Text>&lt;</Text>
-        </View>
-        <Text style={styles.headerText}>Order History</Text>
+    <View style={styles.orderItem}>
+      <View style={styles.orderInfo}>
+        <Text style={styles.orderIdText}>Order ID: {orderId}</Text>
+        <Text style={styles.dateText}>Date: {date}</Text>
+        <Text style={styles.statusText}>Status: {status}</Text>
       </View>
-      {/* Content */}
-      <View style={styles.content}>
-        {/* Order items */}
-        <View style={styles.orderItem}>
-          <Text>Order Id: 12334          Date: 22/12/2023</Text>
-          <Text>Status: Delivered</Text>
-          {/* Product details */}
-          <Text>Product Name                            Price</Text>
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>CheeseBurger</Text>
-            <Text style={styles.productPrice}>€12.34</Text>
-          </View>
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>Coffee</Text>
-            <Text style={styles.productPrice}>€5.36</Text>
-          </View>
+      <View style={styles.productList}>
+        <View style={styles.productHeader}>
+          <Text style={styles.productHeaderItem}>Product Name</Text>
+          <Text style={styles.productHeaderItem}>Price</Text>
         </View>
-        {/* More order items */}
+        {items.map((item, index) => (
+          <View key={index} style={styles.productRow}>
+            <Text style={styles.productName}>{item.name}</Text>
+            <Text style={styles.productPrice}>{`€${item.price}`}</Text>
+          </View>
+        ))}
       </View>
-
-      <View style={styles.content}>
-        {/* Order items */}
-        <View style={styles.orderItem}>
-          <Text>Order Id: 12337          Date: 22/12/2023</Text>
-          <Text>Status: Delivered</Text>
-          {/* Product details */}
-          <Text>Product Name                            Price</Text>
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>CheeseBurger</Text>
-            <Text style={styles.productPrice}>€12.34</Text>
-          </View>
-          <View style={styles.productDetails}>
-            <Text style={styles.productName}>Coffee</Text>
-            <Text style={styles.productPrice}>€5.36</Text>
-          </View>
-        </View>
-        {/* More order items */}
+      <View style={styles.amountSection}>
+        <Text style={styles.amountText}>Total Amount Owed: €{totalOwed.toFixed(2)}</Text>
+        {status === 'Paid' && (
+          <Text style={styles.amountText}>Total Amount Paid: €{totalPaid.toFixed(2)}</Text>
+        )}
       </View>
-      <View style={styles.paymentSummary}>
-        <View style={styles.summaryItem}>
-          <Text>Amount Owed:</Text>
-          <Text>$70</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Text>Amount Paid:</Text>
-          <Text>$10</Text>
-        </View>
     </View>
+  );
+};
+
+const MyOrderHistory = () => (
+  <>
+    <Header heading="My Order History" />
+    <View style={styles.container}>
+      <OrderItem
+        orderId="12334"
+        date="22/12/2023"
+        status="Delivered"
+        items={[
+          { name: 'CheeseBurger', price: 12.34 },
+          { name: 'Coffee', price: 5.36 },
+        ]}
+      />
+      <OrderItem
+        orderId="12337"
+        date="10/12/2023"
+        status="Paid"
+        items={[
+          { name: 'Pancake', price: 16.34 },
+          { name: 'Coffee', price: 5.36 },
+        ]}
+      />
     </View>
     <Footer/>
-    </>
-  );
-}
+  </>
+);
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "E9BABA",
-    maxWidth: 480,
-    marginHorizontal: "auto",
-    flexDirection: "column",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  header: {
-    backgroundColor: "rgba(236, 144, 144, 1)",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: "#D9D9D9",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  headerText: {
-    fontSize: 20,
-    color: "#fff",
-    marginLeft: 10,
-  },
-  content: {
-    paddingTop: 20,
-    backgroundColor: 'ED6BEF',
-  },
-  orderContainer: {
-    width: "100%",
-    alignItems: "center",
+    flex: 1,
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
   },
   orderItem: {
-    backgroundColor: "rgba(237, 107, 239, 0.475)",
-    width: "80%",
-    maxWidth: 334,
+    backgroundColor: '#FBCFE8',
     borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     marginBottom: 20,
-    padding: 10,
+    width: '90%',
+    maxWidth: 400,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  orderDetails: {
-    fontFamily: "Hanuman, sans-serif",
-    textAlign: "center",
+  orderInfo: {
     marginBottom: 10,
   },
-  productDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  orderIdText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  dateText: {
+    fontSize: 16,
+  },
+  statusText: {
+    fontSize: 16,
+  },
+  productList: {
+    marginTop: 10,
+  },
+  productHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 5,
+  },
+  productHeaderItem: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  productRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 5,
   },
-  
-  paymentSummary: {
-    backgroundColor: "rgba(244, 174, 244, 1)",
-    width: "80%",
-    maxWidth: 355,
-    borderRadius: 15,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 20,
-    marginBottom: 20,
+  productName: {
+    fontSize: 14,
   },
-  summaryItem: {
-    alignItems: "center",
+  productPrice: {
+    fontSize: 14,
+  },
+  amountSection: {
+    marginTop: 10,
+  },
+  amountText: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

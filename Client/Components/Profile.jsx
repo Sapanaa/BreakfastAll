@@ -1,151 +1,145 @@
 import * as React from "react";
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity  } from "react-native";
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
 import Header from "./Header";
 import Footer from "./Footer";
 
 function MyProfile() {
+  const handleEditProfile = () => {
+    // Handle edit profile action
+    console.log("Edit Profile clicked");
+  };
+
+  const handleSave = () => {
+    // Handle save action
+    console.log("Save clicked");
+  };
+
+  const handleRequestEmployee = () => {
+    // Handle request employee action
+    console.log("Request Employee clicked");
+  };
+
   return (
     <>
-    <Header/>
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.backButton}>
-          <Text>&lt;</Text>
-        </View>
-      </View>
-      <View style={styles.content}>
-        <View style={styles.greeting}>
-          <Text>Hello Ana,</Text>
-          <Text>Welcome</Text>
-        </View>
-        <Image
-          resizeMode="auto"
-          source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/6c6011e2424229c9789e932c86eda0a4785524e91aa2f62d4d0a229bf4ff041d?" }}
-          style={styles.profileImage}
-        />
-        <View style={styles.actions}>
-          <View style={styles.editProfile}>
-          <Text style={styles.editProfileText}>Edit Profile</Text>
+      <Header heading={"My Profile"} />
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.greeting}>
+            <Text style={styles.text}>Hello Ana,</Text>
+            <Text style={styles.text}>Welcome</Text>
           </View>
-          <View style={styles.action}>
-            <TextInput 
-            style={styles.input}
-            placeholder= "Enter Nickname " 
-            placeholderTextColor="#999" />
-          </View>
-          <TouchableOpacity style={styles.action}>
-          <Text style={styles.buttonText}>Save</Text>
+          <Image
+            resizeMode="cover"
+            source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/6c6011e2424229c9789e932c86eda0a4785524e91aa2f62d4d0a229bf4ff041d?" }}
+            style={styles.profileImage}
+          />
+          <TouchableOpacity style={styles.editProfile} onPress={handleEditProfile}>
+            <Text style={styles.editProfileText}>Edit Picture</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.employeeRequest}>
-          <Text>Request Employee</Text>
-          <View style={styles.forwardButton}>
-            <Text>&lt;</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Nickname"
+            placeholderTextColor="#999"
+          />
+          <TouchableOpacity style={styles.action} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+          <View style={styles.employeeRequest}>
+            <Text style={styles.employeeText}>Request Employee</Text>
+            <TouchableOpacity style={styles.forwardButton} onPress={handleRequestEmployee}>
+              <Text style={styles.forwardButtonText}>&#10132;</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-      <View style={styles.footer}>
-        <Image
-          resizeMode="auto"
-          source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/fb372c6c0c49468f23baad31c728026bca7154c22769e29dece8c16ca4b47542?" }}
-          style={styles.footerImage1}
-        />
-        <Image
-          resizeMode="auto"
-          source={{ uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/b53b15c5472f49e0fa829a95ef1f5118b61c88885367c3f0a55cf9dae9fe00bf?" }}
-          style={styles.footerImage2}
-        />
-      </View>
-    </View>
-    <Footer/>
+      <Footer />
     </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    maxWidth: 480,
-    margin: "0 auto",
-    flexDirection: "column",
-    alignItems: "stretch",
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 100,
+    backgroundColor: "#fdeaea",
+
   },
-  header: {
-    backgroundColor: "rgba(236, 144, 144, 1)",
-    paddingHorizontal: 26,
-    paddingVertical: 24,
-  },
-  backButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    backgroundColor: "#D9D9D9",
-    alignItems: "center",
-    justifyContent: "center",
+  text: {
+    color: "#B83838",
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
   content: {
-    paddingHorizontal: 36,
-    marginTop: 7,
+    alignItems: "center",
   },
   greeting: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 20,
   },
+  profileImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 20,
+  },
   editProfile: {
-    backgroundColor: "#FEDCF9",
+    backgroundColor: "#EC9090",
     borderRadius: 8,
-    padding: 10,
-    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     marginBottom: 20,
   },
   editProfileText: {
-    fontSize: 20,
+    fontSize: 18,
     color: "#B83838",
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     marginBottom: 20,
-  },
-  
-  profileImage: {
-    width: 74,
-    height: 74,
-    borderRadius: 37,
-  },
-  actions: {
-    marginTop: 65,
+    width: "100%",
   },
   action: {
+    backgroundColor: "#EC9090",
+    borderRadius: 30,
+    paddingVertical: 15,
+    paddingHorizontal: 50,
     marginBottom: 20,
+    alignItems: "center",
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
   },
   employeeRequest: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 176,
-    maxWidth: 290,
+    marginBottom: 20,
+    width: "100%",
   },
-  footer: {
-    paddingHorizontal: 80,
-    paddingVertical: 19,
-    backgroundColor: "rgba(229, 104, 127, 1)",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 102,
+  employeeText: {
+    fontSize: 18,
+    color: "#333",
   },
-  footerImage1: {
-    width: 24,
-    height: 24,
+  forwardButton: {
+    backgroundColor: "#E5687F",
+    borderRadius: 8,
+    padding: 10,
+    alignItems: "center",
   },
-  footerImage2: {
-    width: 156,
-    height: 24,
+  forwardButtonText: {
+    fontSize: 24,
+    color: "#000",
   },
 });
 

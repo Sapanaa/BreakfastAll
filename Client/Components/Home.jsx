@@ -1,14 +1,12 @@
 import * as React from "react";
 import { View, StyleSheet, Image, Text } from "react-native";
-
+import Breakfast from "../assets/Breakfast.png";
 function MyHome() {
   return (
         <View style={styles.container}>
           <Image
             resizeMode="auto"
-            source={{
-              uri: "https://cdn.builder.io/api/v1/image/assets/TEMP/3b7178e8c5def31224fcc27349f0f624b8930a1bfb70a34a5f84eec386bac8d8?",
-            }}
+            source={Breakfast}
             style={styles.image}
           />
           <Text style={styles.heading}>BREAKFAST ALL DAY</Text>
@@ -32,7 +30,7 @@ function MyHome() {
         width: "100%",
         flexDirection: "column",
         alignItems: "center",
-        padding: 30,
+        padding: 40,
         margin: "0 auto",
       },
       image: {
@@ -41,17 +39,15 @@ function MyHome() {
       },
       heading: {
         color: "#93092A",
-        fontFamily: "Irish Grover, sans-serif",
         marginTop: 48,
         fontSize: 32,
       },
     
       description: {
         color: "#0D6056",
-        fontFamily: "Itim, sans-serif",
-        alignSelf: "flex-start",
         marginTop: 27,
         marginLeft: 22,
+        textAlign: "center",
       },
       qrCode: {
         backgroundColor: "#A25252",
@@ -62,7 +58,6 @@ function MyHome() {
       },
       qrCodeText: {
         color: "#fff",
-        fontFamily: "Itim, sans-serif",
       },
     });
     

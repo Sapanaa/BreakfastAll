@@ -1,110 +1,106 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text , TextInput, ScrollView, SafeAreaView} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from "react-native";
 import Footer from "./Footer";
+import Header from "./Header";
 
-function MyRequest() {
-    const [inputText, setInputText] = useState("");
+const menuItemData = [
+  { key: 'drinkOrder', label: 'Drink Order Assistance' },
+  { key: 'techSupport', label: 'Technical Support\n(Wifi connectivity)' },
+  { key: 'menuRecommendation', label: 'Menu Recommendation' },
+  { key: 'generalEnquiry', label: 'General Enquiry' },
+  { key: 'getCheck', label: 'Get Check' },
+];
+
+const MenuItem = ({ label, onPress }) => (
+  <TouchableOpacity onPress={onPress} style={styles.menuItem}>
+    <Text style={styles.menuItemText}>{label}</Text>
+  </TouchableOpacity>
+);
+
+const MyRequest = () => {
+  const [othersInputText, setOthersInputText] = useState(""); // State to hold the text input value
+
+  const handleMenuItemPress = (label) => {
+    console.log(`Menu item pressed: ${label}`);
+    // Additional logic based on the pressed menu item
+  };
 
   return (
     <>
-    <SafeAreaView style={styles.container}>
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
-    <View style={styles.header}>
-          <Text style={styles.headerText}>Request Employee</Text>
-        </View>
-        <View style={styles.contentContainer}>
-      <View style={styles.optionsContainer}>
-        <View style={styles.option}>
-          <Text>Drink Order Assistance</Text>
-        </View>
-        <View style={styles.option}>
-          <Text>Technical Support{"\n"}(Wifi connectivity)</Text>
-        </View>
-        <View style={styles.option}>
-          <Text>Menu Recommendation</Text>
-        </View>
-        <View style={styles.option}>
-          <Text>General Enquiry</Text>
-        </View>
-        <View style={styles.option}>
-          <Text>Get Check</Text>
-        </View>
-        <Text style={styles.others}>Others</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            multiline
-            placeholder="Write here..."
-            value={inputText}
-            onChangeText={setInputText}
-          />
-        </View>
+      <Header heading={"Request Employee"} />
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <View style={styles.menuList}>
+            {menuItemData.map((item) => (
+              <MenuItem
+                key={item.key}
+                label={item.label}
+                onPress={() => handleMenuItemPress(item.label)}
+              />
+            ))}
+            <View style={styles.othersSection}>
+              <Text>Others</Text>
+            </View>
+            <View style={styles.othersInput}>
+              <TextInput
+                style={styles.textInput}
+                multiline
+                placeholder="Write here..."
+                value={othersInputText}
+                onChangeText={(text) => setOthersInputText(text)}
+              />
+            </View>
+          </View>
         </View>
       </View>
-    </ScrollView>
-     </SafeAreaView>
-    <Footer/>
+      <Footer />
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-   // flex :1,
-    maxWidth: 480,
+    flex: 1,
+    backgroundColor: "#FDE7E7",
+    paddingTop: 100,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    marginTop: 20,
     width: "100%",
-    margin: "0 auto",
   },
-  scrollViewContent: {
-    flexGrow: 1,
-  },
-  
-  header: {
-    flexDirection: "row",
+  menuList: {
+    backgroundColor: "#FFF",
+    paddingVertical: 20,
+    paddingHorizontal: 10,
     alignItems: "center",
-    backgroundColor: "#EC9090",
-    padding: 20,
-    borderRadius: 50,
-    marginBottom: 20,
   },
-  backButton: {
-    backgroundColor: "#D9D9D9",
-    borderRadius: 10,
-    padding: 10,
-  },
-  headerText: {
-    marginLeft: 20,
-    fontSize: 20,
-    //fontFamily: "Itim, sans-serif",
-    color: "#221C1C",
-  },
-  optionsContainer: {
-    padding: 20,
-    marginBottom: 20,
-  },
-  option: {
+  menuItem: {
     backgroundColor: "#EBB3B3",
     borderRadius: 20,
-    padding: 15,
-    marginBottom: 15,
+    padding: 10,
+    marginBottom: 10,
   },
-  others: {
-    marginTop: 20,
-    //fontFamily: "Imprima, sans-serif",
-    color: "#000",
-    fontSize: 18,
+  menuItemText: {
+    fontFamily: "Roboto",
+    textAlign: "center",
   },
-  inputContainer: {
+  othersSection: {
+    marginBottom: 10,
+  },
+  othersInput: {
     backgroundColor: "#D9D9D9",
     borderRadius: 20,
     padding: 20,
-    marginTop: 10,
-  },
-  input: {
     height: 100,
-    fontSize: 16,
+    justifyContent: "flex-start",
   },
-
+  textInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+  },
 });
 
 export default MyRequest;

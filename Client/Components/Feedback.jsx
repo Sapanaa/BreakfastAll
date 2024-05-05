@@ -1,129 +1,92 @@
 import React from "react";
-import { SafeAreaView, View, StyleSheet, Text } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import Header from "./Header";
+import { AirbnbRating } from "react-native-ratings";
 
-function MyComponent() {
-  const renderRatings = (category) => {
-    return (
-      <View style={styles.ratingContainer}>
-        <Text style={styles.category}>{category}</Text>
-        <View style={styles.ratingList}>
-          {[1, 2, 3, 4, 5].map((rating) => (
-            <View key={rating} style={styles.ratingCircle}>
-              <Text style={styles.ratingNumber}>{rating}</Text>
-            </View>
-          ))}
-        </View>
-      </View>
-    );
+const Feedback = () => {
+  const handleRatingSubmit = (isAnonymous) => {
+    // Logic to handle rating submission
+    console.log(`Rating submitted ${isAnonymous ? "anonymously" : "with name"}`);
+
+    // Show success message
+    Alert.alert("Success", "Feedback submitted successfully!", [
+      {
+        text: "OK",
+        onPress: () => console.log("OK Pressed"),
+      },
+    ]);
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Leave Feedback</Text>
-      </View>
-      <View style={styles.feedbackForm}>
-        <Text style={styles.formTitle}>FEEDBACK FORM</Text>
-        {renderRatings("Food")}
-        {renderRatings("Service by employee")}
-        {renderRatings("Ambiance")}
-      </View>
-      <View style={styles.buttonContainer}>
-        <View style={styles.button}>
-          <Text style={styles.buttonText}>Submit</Text>
+    <>
+      <Header heading={"Leave Feedback"} />
+      <View style={styles.container}>
+        <Text style={styles.head}>FeedBack Form</Text>
+        <View style={styles.form}>
+          <Text style={styles.question}>Food</Text>
+          <AirbnbRating count={5} defaultRating={0} size={30} showRating={false} />
+          <Text style={styles.question}>Service by employee</Text>
+          <AirbnbRating count={5} defaultRating={0} size={30} showRating={false} />
+          <Text style={styles.question}>Ambiance</Text>
+          <AirbnbRating count={5} defaultRating={0} size={30} showRating={false} />
         </View>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => handleRatingSubmit(true)} // Submit Anonymously
+        >
+          <Text>Submit Anonymously</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => handleRatingSubmit(false)} // Submit with name
+        >
+          <Text>Submit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cancelButton}>
+          <Text>Cancel</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.buttonContainer}>
-        <View style={styles.button}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </View>
-      </View>
-    </SafeAreaView>
+    </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    backgroundColor: "#FFF",
-    paddingVertical: 20,
-  },
-  header: {
-    backgroundColor: "#EC9090",
-    borderRadius: 50,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginBottom: 20,
-  },
-  headerText: {
-    fontSize: 20,
-    fontFamily: "Itim, sans-serif",
-    color: "#221C1C",
-  },
-  feedbackForm: {
-    alignItems: "center",
-    borderRadius: 50,
-    backgroundColor: "linear-gradient(12deg, )",
+    backgroundColor: "#FDE7E7",
+    display: "flex",
+    maxWidth: 480,
     width: "100%",
     flexDirection: "column",
-    gap: 20,
-    fontSize: 22,
-    color: "#000",
-    padding: "39px 22px 17px",
+    alignItems: "stretch",
+    margin: "0 auto",
   },
-  formTitle: {
-    fontFamily: "Irish Grover, sans-serif",
+  form: {
+    padding: 20,
   },
-  ratingContainer: {
-    alignSelf: "stretch",
-    alignItems: "center",
+  head: {
+    fontSize: 30,
+    textAlign: "center",
+    padding: 20,
   },
-  category: {
+  question: {
+    fontFamily: "Itim",
+    fontSize: 18,
     color: "#6C1368",
-    fontFamily: "Itim, sans-serif",
-    marginBottom: 10,
+    marginTop: 20,
   },
-  ratingList: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
-  },
-  ratingCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#D9D9D9",
-    borderColor: "#6C1368",
-    borderWidth: 2,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  ratingNumber: {
-    fontFamily: "Itim, sans-serif",
-    color: "#6C1368",
-    fontSize: 20,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 20,
-  },
-  button: {
-    justifyContent: "center",
-    alignItems: "center",
+  submitButton: {
     backgroundColor: "#E5687F",
     alignSelf: "center",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginBottom: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    padding: 10,
   },
-  buttonText: {
-    fontFamily: "Itim, sans-serif",
-    textAlign: "center",
-    color: "#000",
+  cancelButton: {
+    backgroundColor: "#E5687F",
+    alignSelf: "center",
+    marginTop: 10,
+    padding: 10,
   },
 });
 
-export default MyComponent;
+export default Feedback;
