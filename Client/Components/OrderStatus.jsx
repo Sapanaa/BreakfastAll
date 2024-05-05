@@ -1,100 +1,93 @@
-import * as React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
-import Footer from "./Footer";
-import Header from "./Header";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Header from './Header';
+import Footer from './Footer';
 
-function MyStatus() {
-    
-      return (
-      <>
-       <Header/>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <View style={styles.backButton}>
-                  <Text>&lt;</Text>
-                </View>
-                <View style={styles.title}>
-                  <Text>Order Status</Text>
-                </View>
-              </View>
-              <View style={styles.itemContainer}>
-                <View style={styles.itemRow}>
-                  <Text style={styles.itemText}>Ordered Item</Text>
-                  <Text style={styles.itemText}>Time Elapsed</Text>
-                  <Text style={styles.itemText}>Status</Text>
-                </View>
-                <View style={styles.itemRow}>
-                  <Text style={styles.itemText}>Cheese Burger</Text>
-                  <Text style={styles.itemText}>3:00</Text>
-                  <Text style={styles.statusText}>Pending</Text>
-                </View>
-                <View style={styles.itemRow}>
-                  <Text style={styles.itemText}>Coffee</Text>
-                  <Text style={styles.itemText}>5:00</Text>
-                  <Text style={styles.statusText}>Pending</Text>
-                </View>
-                <View style={styles.itemRow}>
-                  <Text style={styles.itemText}>Cheese Pizza</Text>
-                  <Text style={styles.itemText}>----</Text>
-                  <Text style={styles.statusText}>Delivered</Text>
-                </View>
-                <View style={styles.itemRow}>
-                  <Text style={styles.itemText}>Coke</Text>
-                  <Text style={styles.itemText}>----</Text>
-                  <Text style={styles.statusText}>Delivered</Text>
-                </View>
-              </View>
-            </View>
-            <Footer/>
-     </>
-          );
-        }
-        
-        const styles = StyleSheet.create({
-          container: {
-            flex: 1,
-            alignItems: "center",
-            backgroundColor: "#F9E5E5",
-            paddingVertical: 20,
-          },
-          header: {
-            flexDirection: "row",
-            alignItems: "center",
-            padding: 20,
-          },
-          backButton: {
-            borderRadius: 10,
-            backgroundColor: "#EC9090",
-            padding: 10,
-          },
-          title: {
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          },
-          itemContainer: {
-            width: "90%",
-            marginTop: 20,
-            backgroundColor: "#ffffff",
-            borderRadius: 10,
-            padding: 20,
-          },
-          itemRow: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderBottomWidth: 1,
-            borderBottomColor: "#E0E0E0",
-            paddingVertical: 10,
-          },
-          itemText: {
-            fontSize: 16,
-            color: "#000",
-          },
-          statusText: {
-            fontSize: 16,
-            color: "#FC1919",
-          },
-        });
+const orderItems = [
+  { name: 'Cheese Burger', time: '3:00', status: 'Pending' },
+  { name: 'Coffee', time: '5:00', status: 'Pending' },
+  { name: 'Cheese Pizza', time: '----', status: 'Delivered' },
+  { name: 'Coke', time: '-----', status: 'Delivered' },
+];
+
+const OrderItem = ({ name, time, status }) => {
+  const getStatusColor = (status) => {
+    return status === 'Pending' ? { color: 'red' } : { color: 'green' };
+  };
+
+  return (
+    <View style={styles.orderItem}>
+      <Text style={styles.itemName}>{name}</Text>
+      <Text style={styles.itemTime}>{time}</Text>
+      <Text style={[styles.itemStatus, getStatusColor(status)]}>{status}</Text>
+    </View>
+  );
+};
+
+const MyStatus = () => {
+  return (
+    <>
+      <Header heading={"Order Status"}/>
+      <View style={styles.container}>
+        <View style={styles.orderHeader}>
+          <Text style={[styles.orderHeaderTitle, { flex: 2 }]}>Ordered Item</Text>
+          <Text style={[styles.orderHeaderTitle, { flex: 1.5 }]}>Time Elapsed</Text>
+          <Text style={[styles.orderHeaderTitle, { flex: 1 }]}>Status</Text>
+        </View>
+        {orderItems.map((item, index) => (
+          <OrderItem key={index} name={item.name} time={item.time} status={item.status} />
+        ))}
+      </View>
+      <Footer/>
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F9E5E5',
+    alignItems: 'center',
+    paddingVertical: 20,
+    width: '100%',
+    marginTop: 100,
+  },
+  orderHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  orderHeaderTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  orderItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  itemName: {
+    flex: 2,
+    fontSize: 16,
+    color: '#333',
+  },
+  itemTime: {
+    flex: 1.5,
+    fontSize: 16,
+    color: '#333',
+  },
+  itemStatus: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default MyStatus;

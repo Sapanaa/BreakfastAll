@@ -8,12 +8,28 @@ import MyStatus from './Components/OrderStatus';
 import MyMenuItem from './Components/MenuItem';
 import MyRequest from './Components/RequestEmployee';
 import MyFeedback from './Components/Feedback';
+<<<<<<< HEAD
+=======
+import Feedback from './Components/Feedback';
+>>>>>>> b48846bee27f0d48d887c01a945ae13c416941e4
 import MyGoodbye from './Components/Goodbye';
 
 export default function App() {
   return (
     <View style={styles.container}>
+<<<<<<< HEAD
       <MyGoodbye />
+=======
+     {/* < MyHome/>*/}
+     {/*<MyMenu/>*/}
+    {/* <MyMenuItem/> */}
+    {/*<MyStatus/>*/}
+    {/*<MyProfile/>*/}
+    {/*<MyRequest/>*/}
+    {/*<MyOrderHistory/>*/}
+    {/*<Feedback/>*/}
+    <MyGoodbye/>
+>>>>>>> b48846bee27f0d48d887c01a945ae13c416941e4
       <StatusBar style="auto" />
     </View>
   );

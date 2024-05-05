@@ -13,19 +13,22 @@ const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     top: 0,
-    left: 0, 
+    left: 0,
     right: 0,
-    backgroundColor: '#ea8484', // Add a background color for the header
-    paddingVertical: 15,
+    zIndex: 50,
+    backgroundColor: '#ea8484',
+    height: 100, // Increased height for the header
+    justifyContent: 'flex-end', // Align content to the bottom
+    alignItems: 'center', // Center content horizontally
+    paddingVertical: 10,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc', // Add a border color for the bottom border
+    borderBottomColor: '#ccc',
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28, // Increased font size for the heading
     fontWeight: 'bold',
     textAlign: 'center',
-    paddingTop: 7 ,
+    paddingBottom: 10, // Padding at the bottom to push heading downwards
   },
 });
-
