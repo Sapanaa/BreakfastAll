@@ -3,6 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import Notifications from './Components/Notifications';
 import Orders from './Components/Orders';
 import EvaluationP from './Components/EvaluationP';
+import MyProfile from './Components/profile';
+import MyHome from './Components/Home';
 
 
 export default function App() {
@@ -10,7 +12,8 @@ export default function App() {
     <View style={styles.container}>
       {/*<Notifications/>*/}
     {/*  <Orders/>*/}
-      <EvaluationP/>
+     {/* <EvaluationP/>*/}
+     <MyHome />
       <StatusBar style="auto" />
     </View>
   );

@@ -8,11 +8,12 @@ import MyStatus from './Components/OrderStatus';
 import MyMenuItem from './Components/MenuItem';
 import MyRequest from './Components/RequestEmployee';
 import MyFeedback from './Components/Feedback';
+import MyGoodbye from './Components/Goodbye';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      < MyFeedback />
+      <MyGoodbye />
       <StatusBar style="auto" />
     </View>
   );

@@ -6,15 +6,10 @@ import Footer from "./Footer";
 function MyOrderHistory() {
   return (
   <>
-  <Header/>
+  <Header heading="Order History"/>
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.backButton}>
-          <Text>&lt;</Text>
-        </View>
-        <Text style={styles.headerText}>Order History</Text>
-      </View>
+      
       {/* Content */}
       <View style={styles.content}>
         {/* Order items */}
