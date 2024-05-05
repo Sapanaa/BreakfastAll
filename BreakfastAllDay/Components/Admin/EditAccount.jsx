@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, TextInput } fro
 import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
 import Header from "../Next.jsx/Header";
 import Footer from "../Next.jsx/Footer";
-
+import Breakfast from "../../assets/Breakfast.png"
 const Dropdown = ({ options, selectedValue, onSelect }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -75,7 +75,7 @@ const EditAccount = () => {
       <View style={styles.profileInfo}>
         <Image
           resizeMode="contain"
-          source={{ uri: "your-image-url" }}
+          source={Breakfast}
           style={styles.profileImage}
         />
       <Text style={styles.editText}>Edit</Text>
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderColor: 'black',
-    borderWidth: 1,
     borderColor: 'black',
     borderStyle: 'solid',
   },

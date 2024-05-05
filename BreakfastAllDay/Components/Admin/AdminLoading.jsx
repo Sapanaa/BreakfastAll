@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from "rea
 import Footer from "../Next.jsx/Footer";
 import Header from "../Next.jsx/Header";
 import { LinearGradient } from 'expo-linear-gradient';
+import Adm from "../../assets/AdminIm.png";
 
 const NavigationItem = ({ title, onPress }) => (
   <TouchableOpacity onPress={onPress} style={styles.navigationItemContainer}>
@@ -39,7 +40,7 @@ const AdminLoading = () => {
             <View style={styles.contentContainer}>
               <Image
                 resizeMode="contain"
-                source={{ uri: "imageUri" }}
+                source={Adm}
                 style={styles.profileImage}
               />
               <View style={styles.sectionContainer}>
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
     width: 168,
     height: 168,
-    borderWidth: 1,
     borderColor: 'black',
     borderStyle: 'solid',
   },
