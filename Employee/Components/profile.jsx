@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     marginTop: 30,
-    fontFamily: "Poppins, sans-serif",
     fontSize: 14,
     fontWeight: "500",
   },

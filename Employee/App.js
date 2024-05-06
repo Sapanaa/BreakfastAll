@@ -6,17 +6,18 @@ import EvaluationP from './Components/EvaluationP';
 import MyProfile from './Components/Profile';
 import DashBoard from './Components/Dashboard1';
 import Status from './Components/Status';
+import Login from './Components/LoginPa';
 
 export default function App() {
   return (
     <View style={styles.container}>
     {/*  <Notifications/>*/}
     {/*  <Orders/>*/}
-     {/* <EvaluationP/>*/}
+      <EvaluationP/>
    {/*<MyProfile/>*/}
   {/* <DashBoard/>*/}
-  <Status/>
-
+ {/* <Status/>*/}
+{/*<Login/>*/}
    {/*<Orders/>*/}
 
  {/* <Home/>*/}
