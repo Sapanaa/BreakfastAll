@@ -7,6 +7,7 @@ import MyOrderHistory from './Components/OrderHistory';
 //import MyStatus from './Components/OrderStatus';
 import MyMenuItem from './Components/MenuItem';
 //import MyRequest from './Components/RequestEmployee';
+import Feedback from './Components/Feedback';
 
 import MyGoodbye from './Components/Goodbye';
 
@@ -15,14 +16,14 @@ export default function App() {
     <View style={styles.container}>
      {/* < MyHome/>*/}
     {/*<MyMenu/>*/}
-    <MyProfile/>
+     {/*<MyProfile/>*/}
 
    {/* <MyMenuItem/> */}
     {/*<MyStatus/>*/}
     {/*<MyProfile/>*/}
     {/*<MyRequest/>*/}
     {/*<MyOrderHistory/>*/}
-    {/*<Feedback/>*/}
+     <Feedback/>
    {/* <MyGoodbye/>*/}
       <StatusBar style="auto" />
     </View>

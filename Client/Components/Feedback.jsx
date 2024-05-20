@@ -1,34 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Header from "./Header";
 import { AirbnbRating } from "react-native-ratings";
+import { collection, addDoc, serverTimestamp, Firestore } from "firebase/firestore";
+import { db }from "../firebase.config"
 
 const Feedback = () => {
-  const handleRatingSubmit = (isAnonymous) => {
-    // Logic to handle rating submission
-    console.log(`Rating submitted ${isAnonymous ? "anonymously" : "with name"}`);
+  const [ratings, setRatings] = useState({
+    food: 0,
+    service: 0,
+    ambiance: 0,
+  });
 
-    // Show success message
-    Alert.alert("Success", "Feedback submitted successfully!", [
-      {
-        text: "OK",
-        onPress: () => console.log("OK Pressed"),
-      },
-    ]);
+  const handleRatingChange = (field, rating) => {
+    setRatings((prevRatings) => ({
+      ...prevRatings,
+      [field]: rating,
+    }));
+  };
+
+  const handleRatingSubmit = async (isAnonymous) => {
+    console.log("handleRatingSubmit called with isAnonymous:", isAnonymous);
+    console.log("Current ratings:", ratings);
+
+    try {
+      const docRef = await addDoc(collection(db, 'feedback'), {
+        ...ratings,
+        isAnonymous,
+        timestamp: serverTimestamp(),
+      });
+      console.log("Document written with ID: ", docRef.id);
+      Alert.alert("Success", "Feedback submitted successfully!", [
+        {
+          text: "OK",
+          onPress: () => console.log("OK Pressed"),
+        },
+      ]);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      Alert.alert("Error", "There was an error submitting your feedback. Please try again later.");
+    }
   };
 
   return (
     <>
       <Header heading={"Leave Feedback"} />
       <View style={styles.container}>
-        <Text style={styles.head}>FeedBack Form</Text>
+        <Text style={styles.head}>Feedback Form</Text>
         <View style={styles.form}>
           <Text style={styles.question}>Food</Text>
-          <AirbnbRating count={5} defaultRating={0} size={30} showRating={false} />
+          <AirbnbRating
+            count={5}
+            defaultRating={ratings.food}
+            size={30}
+            showRating={false}
+            onFinishRating={(rating) => handleRatingChange('food', rating)}
+          />
           <Text style={styles.question}>Service by employee</Text>
-          <AirbnbRating count={5} defaultRating={0} size={30} showRating={false} />
+          <AirbnbRating
+            count={5}
+            defaultRating={ratings.service}
+            size={30}
+            showRating={false}
+            onFinishRating={(rating) => handleRatingChange('service', rating)}
+          />
           <Text style={styles.question}>Ambiance</Text>
-          <AirbnbRating count={5} defaultRating={0} size={30} showRating={false} />
+          <AirbnbRating
+            count={5}
+            defaultRating={ratings.ambiance}
+            size={30}
+            showRating={false}
+            onFinishRating={(rating) => handleRatingChange('ambiance', rating)}
+          />
         </View>
         <TouchableOpacity
           style={styles.submitButton}
