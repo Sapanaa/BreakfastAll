@@ -1,93 +1,129 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Header from './Header';
-import Footer from './Footer';
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
+import Header from "./MostComp/Header";
+import Footer from "./MostComp/Footer";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase.config";
 
-const orderItems = [
-  { name: 'Cheese Burger', time: '3:00', status: 'Pending' },
-  { name: 'Coffee', time: '5:00', status: 'Pending' },
-  { name: 'Cheese Pizza', time: '----', status: 'Delivered' },
-  { name: 'Coke', time: '-----', status: 'Delivered' },
-];
+const SectionTitle = ({ title }) => (
+  <Text style={styles.sectionTitle}>{title}</Text>
+);
 
-const OrderItem = ({ name, time, status }) => {
-  const getStatusColor = (status) => {
-    return status === 'Pending' ? { color: 'red' } : { color: 'green' };
+const Divider = () => <View style={styles.divider} />;
+
+const Status = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const ordersCollection = collection(db, "orders");
+        const ordersSnapshot = await getDocs(ordersCollection);
+        const ordersList = ordersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setOrders(ordersList);
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  useEffect(() => {
+    const paidOrders = orders.filter(order => order.status !== "Paid");
+    setOrders(paidOrders);
+  }, [orders]);
+
+  const handleAcceptPayment = async (orderId) => {
+    try {
+      const orderRef = doc(db, "orders", orderId);
+      await updateDoc(orderRef, { status: "Paid" });
+      // Update the local state to reflect the change
+      setOrders((prevOrders) =>
+        prevOrders.filter(order => order.id !== orderId)
+      );
+    } catch (error) {
+      console.error("Error accepting payment: ", error);
+    }
   };
 
   return (
-    <View style={styles.orderItem}>
-      <Text style={styles.itemName}>{name}</Text>
-      <Text style={styles.itemTime}>{time}</Text>
-      <Text style={[styles.itemStatus, getStatusColor(status)]}>{status}</Text>
-    </View>
-  );
-};
-
-const MyStatus = () => {
-  return (
     <>
-      <Header heading={"Order Status"}/>
-      <View style={styles.container}>
-        <View style={styles.orderHeader}>
-          <Text style={[styles.orderHeaderTitle, { flex: 2 }]}>Ordered Item</Text>
-          <Text style={[styles.orderHeaderTitle, { flex: 1.5 }]}>Time Elapsed</Text>
-          <Text style={[styles.orderHeaderTitle, { flex: 1 }]}>Status</Text>
-        </View>
-        {orderItems.map((item, index) => (
-          <OrderItem key={index} name={item.name} time={item.time} status={item.status} />
+      <Header heading={"Status"} />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {orders.map((order, index) => (
+          <View key={index}>
+            <View style={styles.infoContainer}>
+              <SectionTitle title={`Table No ${order.tableNumber}`} />
+              <Text style={styles.status}>Status: {order.status}</Text>
+            </View>
+            <Divider />
+            <View style={styles.menuList}>
+              {order.menuItem.map((item, itemIndex) => (
+                <Text key={itemIndex} style={styles.menuItem}>
+                  {item.menuName}
+                </Text>
+              ))}
+            </View>
+            <TouchableOpacity onPress={() => handleAcceptPayment(order.id)}>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>Accept Payment</Text>
+              </View>
+            </TouchableOpacity>
+            <Divider />
+          </View>
         ))}
-      </View>
-      <Footer/>
+      </ScrollView>
+      <Footer />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9E5E5',
-    alignItems: 'center',
-    paddingVertical: 20,
-    width: '100%',
-    marginTop: 100,
-  },
-  orderHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignSelf: 'stretch',
+  scrollContainer: {
+    flexGrow: 1,
+    backgroundColor: "#FDE7E7",
+    paddingVertical: 100,
     paddingHorizontal: 20,
-    marginBottom: 10,
   },
-  orderHeaderTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+  infoContainer: {
+    paddingHorizontal: 54,
+    marginTop: 19,
   },
-  orderItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignSelf: 'stretch',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  sectionTitle: {
+    backgroundColor: "#FFF",
+    alignSelf: "flex-end",
+    padding: 15,
+    fontSize: 20,
   },
-  itemName: {
-    flex: 2,
+  status: {
+    marginTop: 51,
     fontSize: 16,
-    color: '#333',
   },
-  itemTime: {
-    flex: 1.5,
-    fontSize: 16,
-    color: '#333',
+  divider: {
+    marginVertical: 22,
+    height: 3,
+    backgroundColor: "#000",
   },
-  itemStatus: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: 'bold',
+  menuList: {
+    alignSelf: "center",
+    marginTop: 44,
+  },
+  menuItem: {
+    fontSize: 20,
+    lineHeight: 41,
+  },
+  actionContainer: {
+    backgroundColor: "#E5687F",
+    alignSelf: "center",
+    marginTop: 115,
+    padding: 10,
+  },
+  actionText: {
+    color: "#000",
+    fontSize: 20,
+    fontFamily: "Radley",
   },
 });
 
-export default MyStatus;
+export default Status;

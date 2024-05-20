@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Header from "./Header";
-import Footer from "./Footer";
 import { AirbnbRating } from "react-native-ratings";
 
 const Feedback = () => {
@@ -47,7 +46,6 @@ const Feedback = () => {
           <Text>Cancel</Text>
         </TouchableOpacity>
       </View>
-      <Footer />
     </>
   );
 };
@@ -61,7 +59,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "stretch",
     margin: "0 auto",
-    height:"100%",
   },
   form: {
     padding: 20,

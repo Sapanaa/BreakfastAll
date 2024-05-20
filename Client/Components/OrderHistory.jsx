@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Header from './Header';
 import Footer from './Footer';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase.config';
 
 const OrderItem = ({ orderId, date, status, items }) => {
   // Calculate total amount owed
@@ -23,7 +25,7 @@ const OrderItem = ({ orderId, date, status, items }) => {
         </View>
         {items.map((item, index) => (
           <View key={index} style={styles.productRow}>
-            <Text style={styles.productName}>{item.name}</Text>
+            <Text style={styles.productName}>{item.menuName}</Text>
             <Text style={styles.productPrice}>{`€${item.price}`}</Text>
           </View>
         ))}
@@ -38,37 +40,47 @@ const OrderItem = ({ orderId, date, status, items }) => {
   );
 };
 
-const MyOrderHistory = () => (
-  <>
-    <Header heading="My Order History" />
-    <View style={styles.container}>
-      <OrderItem
-        orderId="12334"
-        date="22/12/2023"
-        status="Delivered"
-        items={[
-          { name: 'CheeseBurger', price: 12.34 },
-          { name: 'Coffee', price: 5.36 },
-        ]}
-      />
-      <OrderItem
-        orderId="12337"
-        date="10/12/2023"
-        status="Paid"
-        items={[
-          { name: 'Pancake', price: 16.34 },
-          { name: 'Coffee', price: 5.36 },
-        ]}
-      />
-    </View>
-    <Footer/>
-  </>
-);
+const MyOrderHistory = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const ordersCollection = collection(db, 'orders');
+        const ordersSnapshot = await getDocs(ordersCollection);
+        const ordersData = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setOrders(ordersData);
+      } catch (error) {
+        console.error('Error fetching orders: ', error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  return (
+    <>
+      <Header heading="My Order History" />
+      <View style={styles.container}>
+        {orders.map((order, index) => (
+          <OrderItem
+            key={index}
+            orderId={order.orderId}
+            date={order.date}
+            status={order.status}
+            items={order.menuItem} // Use menuItem instead of items
+          />
+        ))}
+      </View>
+      <Footer />
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FBCFE8',
+    backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,

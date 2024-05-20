@@ -2,17 +2,25 @@ import * as React from "react";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
 import Header from "./Header";
 import Footer from "./Footer";
-import Pro from "../assets/ClientP.png";
+import { collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase.config';
 
 function MyProfile() {
+  const [nickname, setNickname] = React.useState('');
+
   const handleEditProfile = () => {
     // Handle edit profile action
     console.log("Edit Profile clicked");
   };
 
-  const handleSave = () => {
-    // Handle save action
-    console.log("Save clicked");
+  const handleSave = async () => {
+    try {
+      const clientRef = doc(db, 'clients', 'unique_client_id'); // Replace 'unique_client_id' with the actual client ID
+      await setDoc(clientRef, { nickname }, { merge: true });
+      console.log("Name saved successfully!");
+    } catch (error) {
+      console.error("Error saving name: ", error);
+    }
   };
 
   const handleRequestEmployee = () => {
@@ -41,6 +49,8 @@ function MyProfile() {
             style={styles.input}
             placeholder="Enter Nickname"
             placeholderTextColor="#999"
+            value={nickname}
+            onChangeText={setNickname}
           />
           <TouchableOpacity style={styles.action} onPress={handleSave}>
             <Text style={styles.buttonText}>Save</Text>

@@ -1,52 +1,72 @@
 import * as React from "react";
-import { View, StyleSheet, Image,FlatList, Text, TextInput } from "react-native";
-import Footer from "./Footer";
-import {data} from "../data";
+import { View, StyleSheet, Image, FlatList, Text, TextInput } from "react-native";
 import Header from "./Header";
+import Footer from "./Footer";
+import { db } from "../firebase.config";
+import { collection, getDocs } from "firebase/firestore";
 
 function MyMenu() {
+  const [menuData, setMenuData] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchMenuData = async () => {
+      const menuCollectionRef = collection(db, "menu");
+      const menuSnapshot = await getDocs(menuCollectionRef);
+      const menuData = [];
+      menuSnapshot.forEach((doc) => {
+        // Assuming each document has imageUrl and text fields
+        menuData.push({ id: doc.id, ...doc.data() });
+      });
+      setMenuData(menuData);
+    };
+
+    fetchMenuData();
+  }, []);
+
   return (
     <>
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Our Menu</Text>
-      </View>
-      <View style={styles.search}>         
-          <TextInput
-      style={styles.input}
-      placeholderTextColor="#999" placeholder="Search"
-    />
-        </View>
-      
-      <Text style={styles.categories}>Brunch Shakes Yummies Desserts</Text>
       <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={({ item }) => <View>
-          <Image source={{uri: item.imageUrl}} style={styles.image} />
-          <Text style={styles.text}>{item.text}</Text>
-           </View>}
-        keyExtractor={item => item.id}
-        numColumns={2}
-      />
+        <Header heading={"Menu"} />
+        <View style={styles.search}>
+          <TextInput style={styles.input} placeholderTextColor="#999" placeholder="Search" />
+        </View>
+        <Text style={styles.categories}>Brunch Shakes Yummies Desserts</Text>
+        <View style={styles.container}>
+          <FlatList
+            data={menuData}
+            renderItem={({ item }) => (
+              <MenuItem item={item} />
+            )}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+          />
+        </View>
       </View>
-
-    </View>
-     <Footer/>
-     </>
+      <Footer />
+    </>
   );
 }
 
+// Create a separate component for rendering menu items
+const MenuItem = ({ item }) => {
+  return (
+    <View>
+      <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      <Text style={styles.text}>{item.text}</Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
-    flex :1,
+    flex: 1,
     backgroundColor: "#fdeaea",
     alignItems: "center",
     paddingHorizontal: 2,
     marginTop: 23,
     width: "100%",
   },
-  text:{
+  text: {
     textAlign: "center",
   },
   header: {
@@ -56,9 +76,8 @@ const styles = StyleSheet.create({
   },
   title: {
     backgroundColor: "#EC9090",
-    
   },
-  title: { 
+  title: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     fontSize: 32,
@@ -69,29 +88,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 100,
   },
-
   categories: {
     marginTop: 25,
     fontSize: 20,
   },
-  
   image: {
     width: 155,
     aspectRatio: 1,
-    marginLeft: 20  
+    marginLeft: 20,
   },
-  
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     width: 200,
   },
- 
 });
 
 export default MyMenu;

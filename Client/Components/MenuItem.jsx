@@ -1,30 +1,103 @@
-import * as React from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import Header from "./Header";
 import Footer from "./Footer";
+import { collection, getDocs, updateDoc, doc, addDoc } from "firebase/firestore";
+import { db } from "../firebase.config";
 
-function MyMenuItem() {
+export default function MyMenuItem() {
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [tableNumber] = useState(Math.floor(Math.random() * 6) + 1); // Generate random table number once
+
+  useEffect(() => {
+    fetchMenuItems();
+  }, []);
+
+  const fetchMenuItems = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "menuItems"));
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push({ id: doc.id, ...doc.data(), quantity: 0 }); // Adding a quantity field initialized to 0
+      });
+      setMenuItems(items);
+    } catch (error) {
+      console.error("Error fetching menu items:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleIncrementQuantity = async (itemId) => {
+    try {
+      const itemRef = doc(db, "menuItems", itemId);
+      const item = menuItems.find((item) => item.id === itemId);
+      await updateDoc(itemRef, {
+        quantity: item.quantity + 1 // Incrementing quantity by 1
+      });
+      // Update local state to reflect the change
+      setMenuItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      );
+    } catch (error) {
+      console.error("Error incrementing quantity:", error);
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    try {
+      // Create a new order document in the "orders" collection
+      const orderRef = await addDoc(collection(db, "orders"), {
+        menuItem: menuItems.filter(item => item.quantity > 0), // Only add items with quantity > 0
+        createdAt: new Date(), // Add a timestamp for when the order was placed
+        tableNumber: tableNumber,
+        status: "Pending"
+      });
+      console.log("Order placed successfully with ID: ", orderRef.id);
+      Alert.alert("Order Placed", `Your order has been placed successfully at table number ${tableNumber}.`);
+    } catch (error) {
+      console.error("Error placing order:", error);
+      Alert.alert("Order Failed", "There was an issue placing your order. Please try again.");
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <>
-      <Header heading={"Veg Salad"}/>
+      <Header heading={"Menu Items"} />
       <View style={styles.container}>
-        <View style={styles.menuItemContainer}>
-          <Image
-            resizeMode="cover"
-            source={{
-              uri: "https://www.healthyseasonalrecipes.com/wp-content/uploads/2022/06/healthy-cobb-salad-steps-sq-026.jpg",
-            }}
-            style={styles.image}
-          />
-          <View style={styles.detailsContainer}>
-            <Text style={styles.price}>€10.65</Text>
-            <Text style={styles.ingredientsText}>
-              Ingredients: {"\n"}
-              Avocados, cherry tomatoes, cucumber, capsicum, lettuce, salt, vinegar, olive oil
-            </Text>
+        {menuItems.map((menuItem) => (
+          <View key={menuItem.id} style={styles.menuItemContainer}>
+            <Image
+              resizeMode="cover"
+              source={{ uri: menuItem.image }}
+              style={styles.image}
+            />
+            <View style={styles.detailsContainer}>
+              <Text style={styles.price}>€{menuItem.price}</Text>
+              <Text>{menuItem.ingredients}</Text>  
+              <Text style={styles.quantityText}>Quantity: {menuItem.quantity}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.incrementButton}
+              onPress={() => handleIncrementQuantity(menuItem.id)}
+            >
+              <Text style={styles.incrementButtonText}>+</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        <TouchableOpacity style={styles.orderButton}>
+        ))}
+        <Text style={styles.tableText}>Table Number: {tableNumber}</Text>
+        <TouchableOpacity style={styles.orderButton} onPress={handlePlaceOrder}>
           <Text style={styles.orderButtonText}>Place an Order</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.statusButton}>
@@ -81,6 +154,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     lineHeight: 20,
   },
+  quantityText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  tableText: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#0000ff",
+  },
+  incrementButton: {
+    backgroundColor: "#78EEC4",
+    borderRadius: 10,
+    padding: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  incrementButtonText: {
+    fontSize: 20,
+    color: "#fff",
+  },
   orderButton: {
     backgroundColor: "#78EEC4",
     borderRadius: 30,
@@ -106,6 +199,9 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
-
-export default MyMenuItem;
