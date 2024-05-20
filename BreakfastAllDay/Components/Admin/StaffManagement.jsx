@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
 import Header from "../Next.jsx/Header";
+import { doc, setDoc, serverTimestamp, collection } from "firebase/firestore";
+import { db } from "../../firebase.config";
+// https://firebase.google.com/docs/reference/js/firestore_.md#updatedoc
 
 const SectionTitle = ({ title }) => (
   <Text style={styles.sectionTitle}>{title}</Text>
@@ -51,7 +54,7 @@ const StaffManagement = () => {
   ]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
-  const handleAddStaff = () => {
+  const handleAddStaff = async () => {
     if (newStaffName.trim() !== '' && newStaffEmail.trim() !== '') {
       const newEmployee = {
         name: newStaffName.trim(),
@@ -61,6 +64,13 @@ const StaffManagement = () => {
 
       // Update employees state to include the new employee
       setEmployees([...employees, newEmployee]);
+      const bossRef = collection(db, "Employee");
+await setDoc(doc(bossRef), {
+  name: newStaffName.trim(),
+  email: newStaffEmail.trim(),
+  status: "Active"
+});
+
 
       // Show success message after adding employee
       setShowSuccessMessage(true);

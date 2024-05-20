@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, TextInput } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, TextInput, Alert } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 import Header from "../Next.jsx/Header";
 import Footer from "../Next.jsx/Footer";
-import Breakfast from "../../assets/Breakfast.png"
+import Breakfast from "../../assets/Breakfast.png";
+import { getFirestore, doc, setDoc } from "firebase/firestore"; 
+
 const Dropdown = ({ options, selectedValue, onSelect }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -37,7 +39,7 @@ const Dropdown = ({ options, selectedValue, onSelect }) => {
   );
 };
 
-const InfoSection = ({ title, isInput = false, inputPlaceholder }) => (
+const InfoSection = ({ title, isInput = false, inputPlaceholder, value, onChangeText }) => (
   <View>
     <Text style={styles.sectionTitle}>{title}</Text>
     {isInput ? (
@@ -45,6 +47,8 @@ const InfoSection = ({ title, isInput = false, inputPlaceholder }) => (
         style={styles.inputField}
         placeholder={inputPlaceholder}
         placeholderTextColor="#000"
+        value={value}
+        onChangeText={onChangeText}
       />
     ) : (
       <View style={styles.sectionDivider} />
@@ -60,16 +64,38 @@ const ActionButton = ({ title, onPress }) => (
 
 const EditAccount = () => {
   const [selectedColor, setSelectedColor] = useState("Pink");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
   const colorOptions = ["Pink", "Blush", "Purple"];
+  const db = getFirestore();
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
   };
 
+  const handleSave = async () => {
+    try {
+      const docRef = doc(db, "UpdateEmp", "your-fixed-document"); // Use a fixedocument ID
+      await setDoc(docRef, {
+        phoneNumber: phoneNumber.trim(),
+        address: address.trim(),
+        selectedColor: selectedColor
+      }, { merge: true });
+      Alert.alert("Success", "Profile updated successfully!");
+    } catch (e) {
+      console.error("Error updating profile: ", e);
+      Alert.alert("Error", "Failed to update profile.");
+    }
+  };
+  const patternColors = {
+    Pink: ['#FBECF8', '#E297D6'],
+    Blush: ['#FCE8E6', '#F3A4B5'],
+    Purple: ['#EFE9FF', '#B6ACF3']
+  };
   return (
-    <LinearGradient // Use LinearGradient for background
-      colors={['#FBECF8', '#E297D6']}
-      style={styles.container}
+    <LinearGradient
+    colors={patternColors[selectedColor]} // Change colors based on selected pattern
+    style={styles.container}
     >
       <Header heading={'Edit Profile'} />
       <View style={styles.profileInfo}>
@@ -78,15 +104,27 @@ const EditAccount = () => {
           source={Breakfast}
           style={styles.profileImage}
         />
-      <Text style={styles.editText}>Edit</Text>
+        <Text style={styles.editText}>Edit</Text>
         <Text style={styles.addNewText}>Enter name and add a new picture</Text>
       </View>
-      <View style={styles.line}/>
+      <View style={styles.line} />
       <Text style={styles.mainTitle}>Breakfast All Day</Text>
-      <View style={styles.line}/>
+      <View style={styles.line} />
 
-      <InfoSection title="PHONE NUMBER" isInput={true} inputPlaceholder="Enter your phone number" />
-      <InfoSection title="Address" isInput={true} inputPlaceholder="Enter your address" />
+      <InfoSection
+        title="PHONE NUMBER"
+        isInput={true}
+        inputPlaceholder="Enter your phone number"
+        value={phoneNumber}
+        onChangeText={setPhoneNumber}
+      />
+      <InfoSection
+        title="Address"
+        isInput={true}
+        inputPlaceholder="Enter your address"
+        value={address}
+        onChangeText={setAddress}
+      />
       <Text style={styles.pattern}>Choose Pattern</Text>
       <Dropdown
         options={colorOptions}
@@ -94,9 +132,9 @@ const EditAccount = () => {
         onSelect={handleColorSelect}
       />
       <View style={styles.actionButtons}>
-        <ActionButton title="SAVE" onPress={() => {}} />
+        <ActionButton title="SAVE" onPress={handleSave} />
         <View style={{ width: 60 }} />
-        <ActionButton title="CANCEL" onPress={() => {}} />
+        <ActionButton title="CANCEL" onPress={() => { }} />
       </View>
       <Footer />
     </LinearGradient>
@@ -120,7 +158,6 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderColor: 'black',
-    borderColor: 'black',
     borderStyle: 'solid',
   },
   addNewText: {
@@ -133,13 +170,11 @@ const styles = StyleSheet.create({
     marginLeft: 58,
     marginVertical: 8,
   },
-  
-    line: {
-      borderTopWidth: 1,
-      borderTopColor: 'black',
-      width: '80%',
-    },
-
+  line: {
+    borderTopWidth: 1,
+    borderTopColor: 'black',
+    width: '80%',
+  },
   mainTitle: {
     color: "#000",
     marginTop: 8,
@@ -217,8 +252,8 @@ const styles = StyleSheet.create({
   actionButtonText: {
     color: "#FFF",
   },
-  pattern:{
-    fontSize: '20px',
+  pattern: {
+    fontSize: 20,
     marginVertical: 20,
   }
 });

@@ -4,7 +4,7 @@ import Header from "../Next.jsx/Header";
 import { useState } from "react";
 import Footer from "../Next.jsx/Footer";
 const data = [
-  { date: "3 March", name: "Ana", score: "2", comment: "Rude" },
+  { date : "3 March", name: "Ana", score: "2", comment: "Rude" },
   { date: "1 March", name: "Sam", score: "5", comment: "Perfect" },
   { date: "11 March", name: "Paul", score: "4", comment: "Great" },
 ];
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   searchBox: {
+    fontFamily: "Inter, sans-serif",
   },
   scoreHeader: {
     marginTop: 20,
@@ -131,5 +132,6 @@ const styles = StyleSheet.create({
   },
   cardSection: {
     padding: 10,
+    fontFamily: "Radley, sans-serif",
   },
 });

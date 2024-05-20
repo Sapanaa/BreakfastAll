@@ -1,27 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-import Footer from './Components/Next.jsx/Footer';
-import Header from './Components/Next.jsx/Header';
-import AdminLogin from './Components/Admin/AdminLogin';
-import AdminLoading from './Components/Admin/AdminLoading';
+//import AssignEmployee from './Components/Admin/AssignEmployee';
+import { app } from "./firebase.config";
+import StaffManagement from './Components/Admin/StaffManagement';
 import InvitationForm from './Components/Admin/InvitationForm';
 import EditAccount from './Components/Admin/EditAccount';
-import StaffManagement from './Components/Admin/StaffManagement';
-import AssignEmployee from './Components/Admin/AssignEmployee';
-import EmployeeEvaluation from './Components/Admin/EmployeeEvaluation';
-
-
 export default function App() {
   return (
     <View style={styles.container}>
-  <AdminLoading/>
-  {/* <AdminLogin/>*/}
- {/*<EditAccount />*/}
+  {/*<AdminLogin/>*/}
+  {/*<AdminLoading/>*/}
+ <EditAccount />
+  {/*<StaffManagement/>*/}
+ {/* <InvitationForm/>*/}
   {/*<EmployeeEvaluation/>*/}
-  {/*<AssignEmployee/>*/}
-  {/* <InvitationForm/>*/}
-   {/*<StaffManagement/>*/}
+{/*<AssignEmployee/>*/}
+
   
     </View>
   );

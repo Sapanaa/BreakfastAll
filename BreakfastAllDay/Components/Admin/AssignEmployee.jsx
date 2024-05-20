@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
+import { LinearGradient } from 'expo-linear-gradient'; 
 import Header from "../Next.jsx/Header";
 import Footer from "../Next.jsx/Footer";
-import { ScrollView } from "react-native";
+
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "./firebase.config";
 
 const AssignEmployee = () => {
   const employees = [
