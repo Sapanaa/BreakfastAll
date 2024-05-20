@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Header from './MostComp/Header';
-import Footer from './MostComp/Footer';
 
 const RatingRow = ({ month, rating }) => {
   return (
@@ -27,7 +26,7 @@ const EvaluationP =
 
   return (
     <>
-    <Header heading={"Evaluation"}/>
+    <Header/>
     <View style={styles.mainContainer}>   
       <View style={styles.ratingSection}>
         <View style={styles.headerRow}>
@@ -43,21 +42,17 @@ const EvaluationP =
         <Text>Relative Rating: Ranked 2nd out of 4 employees</Text>
       </View>
       </View>
-      <Footer/>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  
   mainContainer: {
     backgroundColor: "#E9BABA",
     display: "flex",
     width: "100%",
     flexDirection: "column",
     alignItems: "center",
-    height: "100%",
-    paddingTop: 90,
   },
 
   ratingSection: {

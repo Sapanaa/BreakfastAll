@@ -3,21 +3,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import Notifications from './Components/Notifications';
 import Orders from './Components/Orders';
 import EvaluationP from './Components/EvaluationP';
-import MyProfile from './Components/Profile';
+//import MyProfile from './Components/Profile';
 import DashBoard from './Components/Dashboard1';
 import Status from './Components/Status';
-import Login from './Components/LoginPa';
 
 export default function App() {
   return (
     <View style={styles.container}>
-    {/*  <Notifications/>*/}
-    {/*  <Orders/>*/}
-      <EvaluationP/>
+    <Notifications/>
+     {/*<DashBoard/>*/}
+     {/* <EvaluationP/>*/}
    {/*<MyProfile/>*/}
   {/* <DashBoard/>*/}
  {/* <Status/>*/}
-{/*<Login/>*/}
+
    {/*<Orders/>*/}
 
  {/* <Home/>*/}

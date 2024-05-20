@@ -1,7 +1,9 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import Header from "./MostComp/Header";
 import Footer from "./MostComp/Footer";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase.config";
 
 const SectionTitle = ({ title }) => (
   <Text style={styles.sectionTitle}>{title}</Text>
@@ -10,51 +12,61 @@ const SectionTitle = ({ title }) => (
 const Divider = () => <View style={styles.divider} />;
 
 const Status = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const ordersCollection = collection(db, "orders");
+        const ordersSnapshot = await getDocs(ordersCollection);
+        const ordersList = ordersSnapshot.docs.map((doc) => doc.data());
+        setOrders(ordersList);
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
   return (
     <>
-    <Header heading={"Status"}/>
-    <View style={styles.mainContainer}>
-      
-      <View style={styles.infoContainer}>
-        <SectionTitle title="Table No 3" />
-        <Text style={styles.status}>Status: (Active)</Text>
-      </View>
-      <Divider />
-      <View style={styles.menuList}>
-        <Text style={styles.menuItem}> Cheese Burger </Text>
-        <Text style={styles.menuItem}> Croissant jam and butter </Text>
-        <Text style={styles.menuItem}> Scrambled egg </Text>
-        <Text style={styles.menuItem}> Pancakes </Text>
-      </View>
-      <TouchableOpacity>
-      <View style={styles.actionContainer}>
-        <Text style={styles.actionText}>Accept Payment</Text>
-      </View>
-      </TouchableOpacity>
-      <Divider />
-
-    </View>
-    <Footer/>
+      <Header heading={"Status"} />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {orders.map((order, index) => (
+          <View key={index}>
+            <View style={styles.infoContainer}>
+              <SectionTitle title={`Table No ${order.tableNumber}`} />
+              <Text style={styles.status}>Status: {order.status}</Text>
+            </View>
+            <Divider />
+            <View style={styles.menuList}>
+              {order.menuItem.map((item, itemIndex) => (
+                <Text key={itemIndex} style={styles.menuItem}>
+                  {item.menuName}
+                </Text>
+              ))}
+            </View>
+            <TouchableOpacity>
+              <View style={styles.actionContainer}>
+                <Text style={styles.actionText}>Accept Payment</Text>
+              </View>
+            </TouchableOpacity>
+            <Divider />
+          </View>
+        ))}
+      </ScrollView>
+      <Footer />
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  scrollContainer: {
+    flexGrow: 1,
     backgroundColor: "#FDE7E7",
-    maxWidth: 480,
-    width: "100%",
-    margin: "0 auto",
     paddingVertical: 100,
-    height: "100%",
-  },
-  headerContainer: {
-    backgroundColor: "#E9BABA",
-    padding: 18,
-  },
-  headerText: {
-    fontSize: 30,
-    color: "#000",
+    paddingHorizontal: 20,
   },
   infoContainer: {
     paddingHorizontal: 54,
@@ -92,14 +104,7 @@ const styles = StyleSheet.create({
   actionText: {
     color: "#000",
     fontSize: 20,
-  },
-  imageContainer: {
-    alignSelf: "center",
-    marginTop: 49,
-  },
-  image: {
-    width: 42,
-    height: 42,
+    fontFamily: "Radley",
   },
 });
 

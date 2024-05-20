@@ -1,53 +1,43 @@
-import React from "react";
-import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
+// Notifications.js
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 import Header from "./MostComp/Header";
 import Footer from "./MostComp/Footer";
-
-const notificationsData = [
-  {
-    title: "New Order Placed",
-    description: "New order placed at Table 5. Please prepare the following....",
-  },
-  {
-    title: "Order Delivered",
-    description: "Order for Table 8 has been delivered successfully.",
-  },
-  {
-    title: "Assistance Request",
-    description: "Assistance requested at Table 3. Customer needs help with....",
-  },
-  {
-    title: "Feedback Received",
-    description:
-      "New feedback received from Table 12: Service rated 4/5 with... Employee friendliness rated 5/5.",
-  },
-  {
-    title: "Feedback Received",
-    description:
-      "New feedback received from Table 12: Service rated 4/5 with... Employee friendliness rated 5/5.",
-  },
-  {
-    title: "Feedback Received",
-    description:
-      "New feedback received from Table 12: Service rated 4/5 with... Employee friendliness rated 5/5.",
-  },
-];
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase.config';
 
 const Notifications = () => {
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const notificationsCollection = collection(db, 'notifications');
+        const notificationsSnapshot = await getDocs(notificationsCollection);
+        const notificationsData = notificationsSnapshot.docs.map(doc => doc.data());
+        setNotifications(notificationsData);
+      } catch (error) {
+        console.error('Error fetching notifications: ', error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
   return (
     <View style={styles.container}>
-    <Header heading={"Notifications"}/>
-    <ScrollView contentContainerStyle={styles.content}>
-      {notificationsData.map((notification, index) => (
-        <NotificationCard
-          key={index}
-          title={notification.title}
-          description={notification.description}
-        />
-      ))}
-    </ScrollView>
-    <Footer />
-  </View>
+      <Header heading={"Notifications"} />
+      <ScrollView contentContainerStyle={styles.content}>
+        {notifications.map((notification, index) => (
+          <NotificationCard
+            key={index}
+            title={notification.title}
+            description={notification.description}
+          />
+        ))}
+      </ScrollView>
+      <Footer />
+    </View>
   );
 };
 
@@ -56,8 +46,6 @@ const NotificationCard = ({ title, description }) => {
     <View style={styles.card}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
-      {/* Optional: Add an image per notification if needed */}
-      {/* <Image source={require('path_to_your_image')} style={styles.image} /> */}
     </View>
   );
 };
@@ -66,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: "#f5e1e1",
-   
   },
   content: {
     flexGrow: 1,
@@ -96,13 +83,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
     color: "#555",
-  },
-  image: {
-    marginTop: 12,
-    width: "100%",
-    height: 200,
-    resizeMode: "cover",
-    borderRadius: 8,
   },
 });
 

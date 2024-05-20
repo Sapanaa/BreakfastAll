@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 34,
     fontSize: 20,
+    fontFamily: "Radley, sans-serif",
   },
   divider: {
     borderRadius: 20,
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   menuItemTextContainer: {
+    fontFamily: "Inder, sans-serif",
     fontSize: 20,
   },
   arrowContainer: {
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
     
   },
   arrowIcon: {
+    fontFamily: "Inder, sans-serif",
     borderRadius: 10,
     backgroundColor: "#c73749",
     borderColor: "#000",

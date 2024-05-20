@@ -1,32 +1,45 @@
-import React from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import Header from './MostComp/Header';
 import Footer from './MostComp/Footer';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase.config';
 
-const OrderInfo = ({ tableNumber, time }) => (
+const OrderInfo = ({ tableNumber, createdAt }) => (
   <View style={styles.infoContainer}>
-    <Text>Table NO: {tableNumber} </Text>
-    <Text>{time}</Text>
+    <Text>Table NO: {tableNumber}</Text>
+    <Text>{new Date(createdAt.seconds * 1000).toLocaleString()}</Text>
   </View>
 );
 
 const DashBoard = () => {
-  const orders = [
-    { tableNumber: 3, time: '2min' },
-    { tableNumber: 11, time: '5min' },
-    { tableNumber: 9, time: '1min' },
-  ];
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const ordersCollection = collection(db, 'orders');
+        const ordersSnapshot = await getDocs(ordersCollection);
+        const ordersList = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setOrders(ordersList);
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <>
-     <Header heading={"DashBoard"} />
+      <Header heading="DashBoard" />
       <View style={styles.dashboardContainer}>
         <View style={styles.activeOrdersContainer}>
           <Text style={styles.tex}>Active Orders</Text>
-          {orders.map((order, index) => (
-            <OrderInfo key={index} tableNumber={order.tableNumber} time={order.time} />
+          {orders.map((order) => (
+            <OrderInfo key={order.id} tableNumber={order.tableNumber} createdAt={order.createdAt} />
           ))}
-        </View>  
+        </View>
       </View>
       <Footer />
     </>
@@ -56,24 +69,10 @@ const styles = StyleSheet.create({
     width: 320,
     maxWidth: '100%',
     flexDirection: "row",
-    gap: 100,
-  },
-  notificationCheckContainer: {
-    backgroundColor: '#F37A90',
-    marginTop: 20,
-    padding: 10,
-  },
-  notificationIconContainer: {
-    backgroundColor: '#E5687F',
-    marginTop: 20,
-    padding: 29,
+    justifyContent: "space-between",
   },
   tex: {
     fontSize: 20,
-  },
-  notificationIcon: {
-    width: 42,
-    height: 30,
   },
 });
 

@@ -30,42 +30,42 @@ const Orders = () => {
 
   return (
     <>
-    <Header/>
-    <View style={styles.container}>
-      
-      <View style={styles.ordersHeader}>
+      <Header />
       <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.text}>Pending orders</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.text}>Unpaid Orders</Text>
-            </TouchableOpacity>
-      </View>
-      <View style={styles.tableHeader}>
-        <Text>Table</Text>
-        <Text>Product</Text>
-        <Text>Time</Text>
-        <Text>Status</Text>
-      </View>
-      {orders.map((order, index) => (
-        <OrderRow
-          key={index}
-          tableNumber={order.tableNumber}
-          product={order.product}
-          time={order.time}
-          status={order.status}
-        />
-      ))}
-      <TouchableOpacity>
- <View style={styles.footer}>
-        <Text>Check Notifications</Text>
-      </View>
-      </TouchableOpacity>
-    </View>
-    </View>
+        <View style={styles.ordersHeader}>
+          <View style={styles.tableHeader}>
+            <Text>Table</Text>
+            <Text>Product</Text>
+            <Text>Time</Text>
+            <Text>Status</Text>
+          </View>
+          {orders.map((order, index) => (
+            <OrderRow
+              key={index}
+              tableNumber={order.tableNumber}
+              product={order.product}
+              time={order.time}
+              status={order.status}
+            />
+          ))}
+        </View>
 
-    <Footer/>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.text}>Pending orders</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.text}>Unpaid Orders</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity>
+          <View style={styles.footer}>
+            <Text>Check Notifications</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <Footer />
     </>
   );
 };
@@ -87,8 +87,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   ordersHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     marginTop: 30,
     paddingHorizontal: 10,
   },
@@ -116,15 +114,31 @@ const styles = StyleSheet.create({
   orderCellStatus: {
     flex: 2,
   },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 30,
+    paddingHorizontal: 10,
+  },
+  button: {
+    backgroundColor: "#e5687f",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "48%",
+  },
+  text: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
   footer: {
-
-    marginTop: 87,
+    marginTop: 30,
     padding: 20,
     width: "50%",
     borderRadius: 5,
     alignItems: "center",
     backgroundColor: "#e5687f",
-    left: 80,
+    alignSelf: "center",
   },
 });
 
