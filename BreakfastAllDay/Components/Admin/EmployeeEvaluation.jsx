@@ -7,7 +7,7 @@ const data = [
   { date : "3 March", name: "Ana", score: "2", comment: "Rude" },
   { date: "1 March", name: "Sam", score: "5", comment: "Perfect" },
   { date: "11 March", name: "Paul", score: "4", comment: "Great" },
-];
+]
 
 const ScoreCard = ({ date, name, score, comment }) => (
   <View style={styles.scoreCard}>
