@@ -10,15 +10,15 @@ import Status from './Components/Status';
 export default function App() {
   return (
     <View style={styles.container}>
-    <Notifications/>
+   <Status/>
      {/*<DashBoard/>*/}
      {/* <EvaluationP/>*/}
    {/*<MyProfile/>*/}
   {/* <DashBoard/>*/}
- {/* <Status/>*/}
+ {/* <Orders/>*/}
+ 
 
-   {/*<Orders/>*/}
-
+   {/*  <Notifications/>*/}
  {/* <Home/>*/}
       <StatusBar style="auto" />
     </View>

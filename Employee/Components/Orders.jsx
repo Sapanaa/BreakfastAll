@@ -1,7 +1,10 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Header from "./MostComp/Header";
 import Footer from "./MostComp/Footer";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase.config"; 
+
 
 const OrderRow = ({ tableNumber, product, time, status }) => (
   <View style={styles.orderRow}>
@@ -21,16 +24,27 @@ const OrderRow = ({ tableNumber, product, time, status }) => (
 );
 
 const Orders = () => {
-  const orders = [
-    { tableNumber: "3", product: "Burger", time: "10:55", status: "Not delivered" },
-    { tableNumber: "4", product: "Pizza", time: "14:25", status: "Not delivered" },
-    { tableNumber: "7", product: "Cola", time: "12:54", status: "Delivered" },
-    { tableNumber: "3", product: "Beer", time: "10:23", status: "Delivered" },
-  ];
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "orders"));
+        const ordersList = querySnapshot.docs.map(doc => doc.data());
+        setOrders(ordersList);
+       // console.log(ordersList); 
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+        Alert.alert("Error", "There was an error fetching the orders.");
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <>
-      <Header />
+      <Header heading="Status" />
       <View style={styles.container}>
         <View style={styles.ordersHeader}>
           <View style={styles.tableHeader}>
