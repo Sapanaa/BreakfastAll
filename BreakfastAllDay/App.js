@@ -6,17 +6,17 @@ import { app } from "./firebase.config";
 import StaffManagement from './Components/Admin/StaffManagement';
 import InvitationForm from './Components/Admin/InvitationForm';
 import EditAccount from './Components/Admin/EditAccount';
+import EmployeeEvaluation from './Components/Admin/EmployeeEvaluation';
 export default function App() {
   return (
     <View style={styles.container}>
   {/*<AdminLogin/>*/}
   {/*<AdminLoading/>*/}
- <EditAccount />
   {/*<StaffManagement/>*/}
  {/* <InvitationForm/>*/}
-  {/*<EmployeeEvaluation/>*/}
+  {/*<EditAccount />*/}
 {/*<AssignEmployee/>*/}
-
+  <EmployeeEvaluation/>
   
     </View>
   );

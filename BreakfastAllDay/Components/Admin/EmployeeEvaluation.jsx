@@ -1,15 +1,17 @@
-import React from "react";
-import { View, Text, StyleSheet , TextInput} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet , TextInput, Alert} from "react-native";
 import Header from "../Next.jsx/Header";
-import { useState } from "react";
 import Footer from "../Next.jsx/Footer";
-const data = [
-  { date : "3 March", name: "Ana", score: "2", comment: "Rude" },
-  { date: "1 March", name: "Sam", score: "5", comment: "Perfect" },
-  { date: "11 March", name: "Paul", score: "4", comment: "Great" },
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase.config";
+
+ const data = [
+  { date : "3 March", name: "Ana", score: "2"},
+  { date: "1 March", name: "Sam", score: "5"},
+  { date: "11 March", name: "Paul", score: "4"},
 ];
 
-const ScoreCard = ({ date, name, score, comment }) => (
+const ScoreCard = ({ date, name, score }) => (
   <View style={styles.scoreCard}>
     <View style={styles.cardSection}>
       <Text>{date}</Text>
@@ -19,9 +21,6 @@ const ScoreCard = ({ date, name, score, comment }) => (
     </View>
     <View style={styles.cardSection}>
       <Text>{score}</Text>
-    </View>
-    <View style={styles.cardSection}>
-      <Text>{comment}</Text>
     </View>
   </View>
 );
@@ -41,7 +40,34 @@ const ScoreboardItem = ({ date, tables, ratings }) => (
 );
 
 export default function EmployeeEvaluation() {
+  const [feedbackData, setFeedbackData] = useState([]);
   const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "feedback"));
+        const feedbackList = querySnapshot.docs.map(doc => doc.data());
+        setFeedbackData(feedbackList);
+        console.log(feedbackList);
+      } catch (error) {
+        console.error("Error fetching feedback: ", error);
+        Alert.alert("Error", "There was an error fetching the feedback data.");
+      }
+    };
+
+    fetchFeedback();
+  }, []);
+
+  const filteredData = feedbackData.filter(item => {
+    const searchLower = searchText.toLowerCase();
+    const nameLower = item.name ? item.name.toLowerCase() : '';
+    const scoreString = item.score ? item.score.toString() : '';
+    return (
+      nameLower.includes(searchLower) || scoreString.includes(searchLower)
+    );
+  });
+
   return (
     <>
     
@@ -50,23 +76,21 @@ export default function EmployeeEvaluation() {
       <View style={styles.searchSection}>
   <TextInput
     style={styles.searchInput}
-    placeholder="Search by name or comment"
+    placeholder="Search by name "
     onChangeText={(text) => setSearchText(text)}
   />
 </View>
         <View style={styles.scoreHeader}>
-          <Text>Date</Text>
-          <Text>Name</Text>
-          <Text>Score</Text>
-          <Text>Comments</Text>
+          <Text>Food</Text>
+          <Text>Service</Text>
+          <Text>Ambiance</Text>
         </View>
-        {data.map((item, index) => (
+        {feedbackData.map((item, index) => (
           <ScoreCard
             key={index}
-            date={item.date}
-            name={item.name}
-            score={item.score}
-            comment={item.comment}
+            date={item.food}
+            name={item.service}
+            score={item.ambiance}
           />
         ))}
         <View style={styles.scoreHeader}>
