@@ -3,10 +3,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import MyMenu from './Components/Menu';
 import MyProfile from './Components/Profile';
 import MyOrderHistory from './Components/OrderHistory';
-//import MyHome from './Components/Home';
+import MyHome from './Components/Home';
 //import MyStatus from './Components/OrderStatus';
 import MyMenuItem from './Components/MenuItem';
-//import MyRequest from './Components/RequestEmployee';
+import MyRequest from './Components/RequestEmployee';
 import Feedback from './Components/Feedback';
 
 import MyGoodbye from './Components/Goodbye';
@@ -21,9 +21,9 @@ export default function App() {
    {/* <MyMenuItem/> */}
     {/*<MyStatus/>*/}
     {/*<MyProfile/>*/}
-    {/*<MyRequest/>*/}
+    {/*<Feedback/>*/}
     {/*<MyOrderHistory/>*/}
-     <Feedback/>
+     <MyRequest/>
    {/* <MyGoodbye/>*/}
       <StatusBar style="auto" />
     </View>
