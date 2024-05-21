@@ -1,39 +1,64 @@
-// MyProfile.js
-import React, { useState } from "react";
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
-import Header from "./Header";
-import Footer from "./Footer";
-import Pro from "../assets/ClientP.png";
-import { collection, doc, setDoc, addDoc } from 'firebase/firestore';
-import { db } from '../firebase.config';
+import React, { useState, useEffect } from "react";
+import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import Header from "./MostComp/Header";
+import Footer from "./MostComp/Footer";
+import Proff from "../assets/Prof.png";
+import { db } from "../firebase.config";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-function MyProfile() {
-  const [nickname, setNickname] = useState('');
+const ProfileDetail = ({ label, value, onChangeText }) => (
+  <View style={styles.detailContainer}>
+    <Text style={styles.detailLabel}>{label}</Text>
+    <TextInput
+      style={styles.detailValue}
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={`Enter ${label}`}
+    />
+  </View>
+);
 
-  const handleEditProfile = () => {
-    console.log("Edit Profile clicked");
-  };
+const MyProfile = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const employeeId = "your_employee_id"; // Replace with actual employee ID
 
-  const handleSave = async () => {
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const docRef = doc(db, "employee", employeeId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUsername(data.username);
+          setEmail(data.email);
+          setPhoneNumber(data.phoneNumber);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching profile data: ", error);
+        Alert.alert("Error", "There was an error fetching the profile data.");
+      }
+    };
+
+    fetchProfileData();
+  }, [employeeId]);
+
+  const handleUpdateProfile = async () => {
     try {
-      const clientRef = doc(db, 'clients', 'unique_client_id'); // Replace 'unique_client_id' with the actual client ID
-      await setDoc(clientRef, { nickname }, { merge: true });
-      console.log("Name saved successfully!");
-    } catch (error) {
-      console.error("Error saving name: ", error);
-    }
-  };
-
-  const handleMenuItemRequest = async (menuItem) => {
-    try {
-      await addDoc(collection(db, 'notifications'), {
-        title: 'Menu Item Requested',
-        description: `Client has requested the following item: ${menuItem.name}. Please prepare it.`,
-        timestamp: new Date(),
+      const docRef = doc(db, "employee", employeeId);
+      await updateDoc(docRef, {
+        username,
+        email,
+        phoneNumber,
       });
-      console.log('Notification sent successfully!');
+      Alert.alert("Success", "Profile updated successfully.");
     } catch (error) {
-      console.error('Error sending notification: ', error);
+      console.error("Error updating profile: ", error);
+      Alert.alert("Error", "There was an error updating the profile.");
     }
   };
 
@@ -41,120 +66,106 @@ function MyProfile() {
     <>
       <Header heading={"My Profile"} />
       <View style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.greeting}>
-            <Text style={styles.text}>Hello Ana,</Text>
-            <Text style={styles.text}>Welcome</Text>
-          </View>
-          <Image resizeMode="cover" source={Pro} style={styles.profileImage} />
-          <TouchableOpacity style={styles.editProfile} onPress={handleEditProfile}>
-            <Text style={styles.editProfileText}>Edit Picture</Text>
+        <View style={styles.profileSection}>
+          <Image resizeMode="cover" source={Proff} style={styles.profilePic} />
+          <TouchableOpacity style={styles.changePictureButton}>
+            <Text>Change Picture</Text>
           </TouchableOpacity>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Nickname"
-            placeholderTextColor="#999"
-            value={nickname}
-            onChangeText={setNickname}
-          />
-          <TouchableOpacity style={styles.action} onPress={handleSave}>
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-          <View style={styles.employeeRequest}>
-            <Text style={styles.employeeText}>Check Order-History</Text>
-            <TouchableOpacity style={styles.forwardButton} onPress={() => handleMenuItemRequest({ name: 'Sample Item' })}>
-              <Text style={styles.forwardButtonText}>&#10132;</Text>
-            </TouchableOpacity>
+          <ProfileDetail label="Username" value={username} onChangeText={setUsername} />
+          <ProfileDetail label="Email ID" value={email} onChangeText={setEmail} />
+          <ProfileDetail label="Phone Number" value={phoneNumber} onChangeText={setPhoneNumber} />
+          <View style={styles.passwordBox}>
+            <Text style={styles.passwordLabel}>Password</Text>
           </View>
+          <TouchableOpacity style={styles.updateButton} onPress={handleUpdateProfile}>
+            <Text style={styles.updateButtonText}>Update</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <Footer />
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: "#FDE7E7",
+    display: "flex",
+    maxWidth: 680,
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "stretch",
+    margin: "0 auto",
     paddingHorizontal: 20,
-    paddingTop: 100,
-    backgroundColor: "#fdeaea",
+    paddingVertical: 40,
   },
-  text: {
-    color: "#B83838",
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  content: {
+  profileSection: {
     alignItems: "center",
+    paddingBottom: 20,
   },
-  greeting: {
-    flexDirection: "row",
-    alignItems: "center",
+  profilePic: {
+    borderColor: "#FFFFFF",
+    borderWidth: 5,
+    borderRadius: 71,
+    width: 142,
+    height: 142,
+  },
+  changePictureButton: {
+    marginTop: 4,
+    fontFamily: "Poppins, sans-serif",
+    color: "#007BFF",
+  },
+  detailContainer: {
+    width: "100%",
     marginBottom: 20,
   },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 20,
+  detailLabel: {
+    marginTop: 20,
+    fontFamily: "Poppins, sans-serif",
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#333",
   },
-  editProfile: {
-    backgroundColor: "#EC9090",
+  detailValue: {
+    fontFamily: "Poppins, sans-serif",
     borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginBottom: 20,
-  },
-  editProfileText: {
-    fontSize: 18,
-    color: "#B83838",
-  },
-  input: {
+    borderColor: "#A9A9A9",
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    width: "100%",
+    backgroundColor: "#FFF",
+    marginTop: 10,
+    padding: 11,
     fontSize: 16,
-    color: "#333",
-    marginBottom: 20,
-    width: "100%",
   },
-  action: {
-    backgroundColor: "#EC9090",
-    borderRadius: 30,
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  employeeRequest: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    width: "100%",
-  },
-  employeeText: {
-    fontSize: 18,
-    color: "#333",
-  },
-  forwardButton: {
-    backgroundColor: "#E5687F",
+  passwordBox: {
+    marginTop: 30,
     borderRadius: 8,
-    padding: 10,
-    alignItems: "center",
+    borderColor: "#A9A9A9",
+    borderWidth: 1,
+    backgroundColor: "#FFF",
+    height: 40,
+    width: "100%",
+    justifyContent: "center",
+    paddingLeft: 10,
   },
-  forwardButtonText: {
-    fontSize: 24,
-    color: "#000",
+  passwordLabel: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#333",
+  },
+  updateButton: {
+    backgroundColor: "#171F1D",
+    marginTop: 40,
+    width: "100%",
+    alignItems: "center",
+    padding: 15,
+    borderRadius: 10,
+  },
+  updateButtonText: {
+    color: "#FFF",
+    fontSize: 15,
+    fontWeight: "700",
+    fontFamily: "Poppins, sans-serif",
   },
 });
 
