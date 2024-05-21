@@ -1,146 +1,139 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
-import { useState } from 'react';
-const GradientButton = ({ text, onPress }) => (
-    <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
-      <LinearGradient colors={['#8359E3', '#7D4EE5']} style={styles.button} start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}>
-        <Text style={styles.buttonText}>{text}</Text>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
+import React, { useState } from "react";
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase.config"; // Assuming you have configured Firebase
 
-const InputField = ({ label }) => (
-  <View style={styles.inputFieldContainer}>
-    <Text style={styles.inputLabel}>{label}</Text>
-  </View>
-);
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-export default function AdminLogin() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loggedIn, setLoggedIn] = useState(false);
-  
-    const handleLogin = () => {
-      if (email === 'admin@example.com' && password === 'password') {
-        setLoggedIn(true);
-        Alert.alert('Login Successful', 'Welcome!', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
+  const handleLogin = async () => {
+    try {
+      const userRef = doc(db, "users", email);
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        if (userData.password === password) {
+          // Successful login
+          console.log("Login successful");
+          // Navigate to dashboard or perform any other action
+        } else {
+          // Incorrect password
+          Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
+        }
       } else {
-        Alert.alert('Login Failed', 'Invalid email or password.', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
+        // User not found
+        Alert.alert('Login Failed', 'User not found. Please register or check your credentials.');
       }
-    };
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
+    }
+  };
+
   return (
-    <View style={styles.formContainer}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Login</Text>
-        </View>
-        <View style={styles.inputFieldContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Email Address"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-          />
-        </View>
-        <View style={styles.inputFieldContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-        </View>
-        <GradientButton text="Login" onPress={handleLogin} />
-        {loggedIn && <Text style={styles.successText}>Login successful!</Text>}
-        <View style={styles.divider} />
-        <GradientButton text="Enter" />
+    <View style={styles.container}>
+      <Text style={styles.title}>Login</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Email Address</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+        />
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          placeholder="Enter your password"
+          secureTextEntry
+        />
       </View>
+      <View style={styles.loginButtonContainer}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-  },
-  formContainer: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    borderRadius: 30,
-    backgroundColor: '#f3b0f8',
-    shadowColor: '#000',
- 
-    padding: 30,
-    width: '100%',
-  },
-  titleContainer: {
-    marginBottom: 30,
+    borderRadius: 50,
+    backgroundColor: "#F9E7E7",
+    maxWidth: 480,
+    width: "100%",
+    paddingHorizontal: 36,
+    paddingVertical: 75,
+    alignItems: "center",
   },
   title: {
     fontSize: 50,
-    color: '#000',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  inputFieldContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 20,
-    marginBottom: 20,
-    height: 40,
+    fontFamily: "Rakkas, sans-serif",
+    borderWidth: 1,
+    borderColor: "#000",
     paddingHorizontal: 20,
-    justifyContent: 'center',
   },
-  inputLabel: {
-    fontSize: 18,
-    color: '#463348',
-    fontWeight: '200',
+  inputContainer: {
+    marginTop: 54,
+    alignItems: "center",
   },
-  buttonContainer: {
+  label: {
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+    borderRadius: 30,
+    padding: 10,
+    fontSize: 17,
+    fontFamily: "Inder, sans-serif",
+    marginBottom: 20,
+  },
+  password: {
+    backgroundColor: "rgba(0, 0, 0, 0.04)",
+    borderRadius: 30,
+    padding: 10,
+    fontSize: 17,
+    fontFamily: "Inder, sans-serif",
+  },
+  loginButtonContainer: {
     marginTop: 20,
+    alignItems: "center",
   },
-  buttonContainer: {
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 5, // This elevation value is important for iOS shadow
+  loginButton: {
+    borderRadius: 30,
+    backgroundColor: "#7E74BB",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
   },
-  buttonWrapper: {
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 5, // This elevation value is important for iOS shadow
-    overflow: 'hidden', // Ensure shadow is clipped within the rounded border
-  },
-  button: {
-    paddingVertical: 12,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  buttonText: {
+  loginButtonText: {
+    fontFamily: "Inika, sans-serif",
     fontSize: 18,
-    color: '#FFF',
-    fontWeight: 'bold',
+    color: "#FEFCFC",
+    fontWeight: "700",
   },
   divider: {
+    backgroundColor: "rgba(0, 0, 0, 0.10)",
+    marginTop: 20,
     height: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    marginVertical: 20,
+    width: "100%",
   },
+  enterButtonContainer: {
+    marginTop: 165,
+    alignItems: "center",
+  },
+  enterButtonText: {
+    borderRadius: 20,
+    backgroundColor: "#7E74BB",
+    color: "#FEFCFC",
+    paddingVertical: 9,
+    paddingHorizontal: 16,
+    fontSize: 20,
+    fontFamily: "Inika, sans-serif",
+    fontWeight: "700",
+  }
 });
+
+export default Login;

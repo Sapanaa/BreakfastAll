@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, TextInput, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, StyleSheet, Modal, Image, TextInput, Alert, Pressable } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
-import Header from "../Next.jsx/Header";
-import Footer from "../Next.jsx/Footer";
 import Breakfast from "../../assets/Breakfast.png";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; 
+import * as ImagePicker from 'expo-image-picker';
+import {  doc, setDoc } from "firebase/firestore"; 
+import { db } from "../../firebase.config";
 
 const Dropdown = ({ options, selectedValue, onSelect }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -66,8 +66,19 @@ const EditAccount = () => {
   const [selectedColor, setSelectedColor] = useState("Pink");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const [image, setImage] = useState(null);
   const colorOptions = ["Pink", "Blush", "Purple"];
-  const db = getFirestore();
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Permission required', 'Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 
   const handleColorSelect = (color) => {
     setSelectedColor(color);
@@ -75,11 +86,12 @@ const EditAccount = () => {
 
   const handleSave = async () => {
     try {
-      const docRef = doc(db, "UpdateEmp", "your-fixed-document"); // Use a fixedocument ID
+      const docRef = doc(db, "UpdateCompany", "CompanyLocPhone"); // Use a fixedocument ID
       await setDoc(docRef, {
         phoneNumber: phoneNumber.trim(),
         address: address.trim(),
-        selectedColor: selectedColor
+        selectedColor: selectedColor,
+        image: image // Save image URL or base64 data to the database
       }, { merge: true });
       Alert.alert("Success", "Profile updated successfully!");
     } catch (e) {
@@ -87,23 +99,43 @@ const EditAccount = () => {
       Alert.alert("Error", "Failed to update profile.");
     }
   };
+
   const patternColors = {
     Pink: ['#FBECF8', '#E297D6'],
     Blush: ['#FCE8E6', '#F3A4B5'],
     Purple: ['#EFE9FF', '#B6ACF3']
   };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
   return (
     <LinearGradient
     colors={patternColors[selectedColor]} // Change colors based on selected pattern
     style={styles.container}
     >
-      <Header heading={'Edit Profile'} />
       <View style={styles.profileInfo}>
-        <Image
-          resizeMode="contain"
-          source={Breakfast}
-          style={styles.profileImage}
-        />
+        <Pressable onPress={pickImage}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.profileImage} />
+          ) : (
+            <Image
+              resizeMode="contain"
+              source={Breakfast}
+              style={styles.profileImage}
+            />
+          )}
+        </Pressable>
         <Text style={styles.editText}>Edit</Text>
         <Text style={styles.addNewText}>Enter name and add a new picture</Text>
       </View>
@@ -136,7 +168,6 @@ const EditAccount = () => {
         <View style={{ width: 60 }} />
         <ActionButton title="CANCEL" onPress={() => { }} />
       </View>
-      <Footer />
     </LinearGradient>
   );
 };

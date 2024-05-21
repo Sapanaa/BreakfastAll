@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet , TextInput, Alert} from "react-native";
 import Header from "../Next.jsx/Header";
 import Footer from "../Next.jsx/Footer";
+<<<<<<< HEAD
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase.config";
 
@@ -10,6 +11,13 @@ import { db } from "../../firebase.config";
   { date: "1 March", name: "Sam", score: "5"},
   { date: "11 March", name: "Paul", score: "4"},
 ];
+=======
+const data = [
+  { date : "3 March", name: "Ana", score: "2", comment: "Rude" },
+  { date: "1 March", name: "Sam", score: "5", comment: "Perfect" },
+  { date: "11 March", name: "Paul", score: "4", comment: "Great" },
+]
+>>>>>>> 83a30bf1c7f78304a82644c1152f2fcdab1b79b0
 
 const ScoreCard = ({ date, name, score }) => (
   <View style={styles.scoreCard}>
