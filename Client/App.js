@@ -1,13 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import MyMenu from './Components/Menu';
+//import MyMenu from './Components/Menu';
 import MyProfile from './Components/Profile';
-import MyOrderHistory from './Components/OrderHistory';
+//import MyOrderHistory from './Components/OrderHistory';
 import MyHome from './Components/Home';
 //import MyStatus from './Components/OrderStatus';
-import MyMenuItem from './Components/MenuItem';
-import MyRequest from './Components/RequestEmployee';
-import Feedback from './Components/Feedback';
+//import MyMenuItem from './Components/MenuItem';
+//import MyRequest from './Components/RequestEmployee';
+//import Feedback from './Components/Feedback';
 
 import MyGoodbye from './Components/Goodbye';
 
@@ -16,14 +16,14 @@ export default function App() {
     <View style={styles.container}>
      {/* < MyHome/>*/}
     {/*<MyMenu/>*/}
-     {/*<MyProfile/>*/}
-
+     {/*<MyRequest/>*/}
+<MyProfile/>
    {/* <MyMenuItem/> */}
     {/*<MyStatus/>*/}
     {/*<MyProfile/>*/}
     {/*<Feedback/>*/}
     {/*<MyOrderHistory/>*/}
-     <MyRequest/>
+     
    {/* <MyGoodbye/>*/}
       <StatusBar style="auto" />
     </View>

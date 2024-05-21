@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, FlatList, Text, TextInput } from "react-native
 import Header from "./Header";
 import Footer from "./Footer";
 import { db } from "../firebase.config";
-import { collection, getDocs } from "firebase/firestore";
+//import { collection, getDocs } from 'firebase/firestore';
 
 function MyMenu() {
   const [menuData, setMenuData] = React.useState([]);
@@ -14,7 +14,6 @@ function MyMenu() {
       const menuSnapshot = await getDocs(menuCollectionRef);
       const menuData = [];
       menuSnapshot.forEach((doc) => {
-        // Assuming each document has imageUrl and text fields
         menuData.push({ id: doc.id, ...doc.data() });
       });
       setMenuData(menuData);

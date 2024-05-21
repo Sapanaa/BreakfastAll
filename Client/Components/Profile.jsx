@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
 import Header from "./Header";
 import Footer from "./Footer";
-import { collection, doc, setDoc } from 'firebase/firestore';
+//import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 
 function MyProfile() {
@@ -15,7 +15,7 @@ function MyProfile() {
 
   const handleSave = async () => {
     try {
-      const clientRef = doc(db, 'clients', 'unique_client_id'); // Replace 'unique_client_id' with the actual client ID
+      const clientRef = doc(db, 'clients', 'unique_client_id'); 
       await setDoc(clientRef, { nickname }, { merge: true });
       console.log("Name saved successfully!");
     } catch (error) {
