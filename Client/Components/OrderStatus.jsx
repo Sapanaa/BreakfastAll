@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
-import Header from "./MostComp/Header";
-import Footer from "./MostComp/Footer";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import Header from "./Header";
+import Footer from "./Footer";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 const SectionTitle = ({ title }) => (
@@ -11,7 +11,7 @@ const SectionTitle = ({ title }) => (
 
 const Divider = () => <View style={styles.divider} />;
 
-const Status = () => {
+const OrderStatus = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -26,22 +26,15 @@ const Status = () => {
       }
     };
 
-    fetchOrders();
-  }, []);
-
-  useEffect(() => {
-    const paidOrders = orders.filter(order => order.status !== "Paid");
-    setOrders(paidOrders);
-  }, [orders]);
+    fetchOrders(); // Call the fetchOrders function inside useEffect without any dependencies
+  }, []); // Pass an empty dependency array to useEffect to ensure it runs only once
 
   const handleAcceptPayment = async (orderId) => {
     try {
       const orderRef = doc(db, "orders", orderId);
       await updateDoc(orderRef, { status: "Paid" });
-      // Update the local state to reflect the change
-      setOrders((prevOrders) =>
-        prevOrders.filter(order => order.id !== orderId)
-      );
+      // Remove the paid order from the orders state
+      setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
     } catch (error) {
       console.error("Error accepting payment: ", error);
     }
@@ -59,17 +52,13 @@ const Status = () => {
             </View>
             <Divider />
             <View style={styles.menuList}>
-              {order.menuItem.map((item, itemIndex) => (
+              {order.menuItem && order.menuItem.map((item, itemIndex) => (
                 <Text key={itemIndex} style={styles.menuItem}>
                   {item.menuName}
                 </Text>
               ))}
             </View>
-            <TouchableOpacity onPress={() => handleAcceptPayment(order.id)}>
-              <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>Accept Payment</Text>
-              </View>
-            </TouchableOpacity>
+            
             <Divider />
           </View>
         ))}
@@ -126,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Status;
+export default OrderStatus;

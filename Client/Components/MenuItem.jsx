@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import Header from "./Header";
 import Footer from "./Footer";
 import { collection, getDocs, updateDoc, doc, addDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 
-export default function MyMenuItem() {
+export default function MyMenuItem({ route }) {
+  const { collectionName } = route.params;
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tableNumber] = useState(Math.floor(Math.random() * 6) + 1); // Generate random table number once
+  const [tableNumber] = useState(Math.floor(Math.random() * 6) + 1);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchMenuItems();
-  }, []);
+  }, [collectionName]);
 
   const fetchMenuItems = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "menuItems"));
+      const querySnapshot = await getDocs(collection(db, collectionName));
       const items = [];
       querySnapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data(), quantity: 0 }); // Adding a quantity field initialized to 0
+        items.push({ id: doc.id, ...doc.data(), quantity: 0 });
       });
       setMenuItems(items);
     } catch (error) {
@@ -31,12 +34,11 @@ export default function MyMenuItem() {
 
   const handleIncrementQuantity = async (itemId) => {
     try {
-      const itemRef = doc(db, "menuItems", itemId);
+      const itemRef = doc(db, collectionName, itemId);
       const item = menuItems.find((item) => item.id === itemId);
       await updateDoc(itemRef, {
         quantity: item.quantity + 1 // Incrementing quantity by 1
       });
-      // Update local state to reflect the change
       setMenuItems((prevItems) =>
         prevItems.map((item) =>
           item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
@@ -49,9 +51,8 @@ export default function MyMenuItem() {
 
   const handlePlaceOrder = async () => {
     try {
-      // Create a new order document in the "orders" collection
       const orderRef = await addDoc(collection(db, "orders"), {
-        menuItem: menuItems.filter(item => item.quantity > 0), // Only add items with quantity > 0
+        menuItems: menuItems.filter(item => item.quantity > 0), // Only add items with quantity > 0
         createdAt: new Date(), // Add a timestamp for when the order was placed
         tableNumber: tableNumber,
         status: "Pending"
@@ -100,7 +101,7 @@ export default function MyMenuItem() {
         <TouchableOpacity style={styles.orderButton} onPress={handlePlaceOrder}>
           <Text style={styles.orderButtonText}>Place an Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.statusButton}>
+        <TouchableOpacity style={styles.statusButton} onPress={() => navigation.navigate('Status')}>
           <Text style={styles.statusButtonText}>Check Order Status</Text>
         </TouchableOpacity>
       </View>

@@ -1,12 +1,14 @@
 import * as React from "react";
-import { View, StyleSheet, Image, FlatList, Text, TextInput } from "react-native";
+import { View, StyleSheet, Image, FlatList, Text, TextInput, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import Header from "./Header";
 import Footer from "./Footer";
 import { db } from "../firebase.config";
-//import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 function MyMenu() {
   const [menuData, setMenuData] = React.useState([]);
+  const navigation = useNavigation();
 
   React.useEffect(() => {
     const fetchMenuData = async () => {
@@ -34,7 +36,9 @@ function MyMenu() {
           <FlatList
             data={menuData}
             renderItem={({ item }) => (
-              <MenuItem item={item} />
+              <TouchableOpacity onPress={() => navigation.navigate('MenuItem', { collectionName: item.id })}>
+                <MenuItem item={item} />
+              </TouchableOpacity>
             )}
             keyExtractor={(item) => item.id}
             numColumns={2}
@@ -46,7 +50,6 @@ function MyMenu() {
   );
 }
 
-// Create a separate component for rendering menu items
 const MenuItem = ({ item }) => {
   return (
     <View>

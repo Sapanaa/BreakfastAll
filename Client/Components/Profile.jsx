@@ -37,11 +37,7 @@ function MyProfile() {
             <Text style={styles.text}>Hello Ana,</Text>
             <Text style={styles.text}>Welcome</Text>
           </View>
-          <Image
-            resizeMode="cover"
-            source={Pro}
-            style={styles.profileImage}
-          />
+          
           <TouchableOpacity style={styles.editProfile} onPress={handleEditProfile}>
             <Text style={styles.editProfileText}>Edit Picture</Text>
           </TouchableOpacity>
