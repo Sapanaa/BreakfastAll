@@ -7,7 +7,16 @@ import { db } from '../firebase.config';
 
 const OrderItem = ({ orderId, date, status, items }) => {
   // Calculate total amount owed
-  const totalOwed = items.reduce((acc, item) => acc + parseFloat(item.price), 0);
+  const itemsArray = Array.isArray(items) ? items : [];
+
+  // Initialize totalOwed
+  let totalOwed = 0;
+
+  // Calculate total amount owed
+  for (const item of itemsArray) {
+    totalOwed += parseFloat(item.price);
+  }
+
   // Conditionally calculate total amount paid based on status
   const totalPaid = status === 'Paid' ? totalOwed : 0;
 
@@ -47,12 +56,13 @@ const MyOrderHistory = () => {
     const fetchOrders = async () => {
       try {
         const ordersCollection = collection(db, 'orders');
-        const ordersSnapshot = await getDocs(ordersCollection);
-        const ordersData = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setOrders(ordersData);
-      } catch (error) {
-        console.error('Error fetching orders: ', error);
-      }
+    const ordersSnapshot = await getDocs(ordersCollection);
+    const ordersData = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    console.log('Orders data:', ordersData); // Debugging
+    setOrders(ordersData);
+  } catch (error) {
+    console.error('Error fetching orders: ', error);
+  }
     };
 
     fetchOrders();

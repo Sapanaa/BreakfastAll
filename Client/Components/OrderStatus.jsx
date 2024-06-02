@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import Header from "./Header";
 import Footer from "./Footer";
-import { collection, getDocs } from "firebase/firestore";
+//import { useRoute } from '@react-navigation/native';
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 const SectionTitle = ({ title }) => (
@@ -11,14 +12,18 @@ const SectionTitle = ({ title }) => (
 
 const Divider = () => <View style={styles.divider} />;
 
-const OrderStatus = () => {
+const OrderStatus = ({route}) => {
   const [orders, setOrders] = useState([]);
+  const { scannedData } = route.params;
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        // Query orders collection to filter orders by table number
         const ordersCollection = collection(db, "orders");
-        const ordersSnapshot = await getDocs(ordersCollection);
+        const q = query(ordersCollection, where("tableNumber", "==", scannedData));
+        // Fetch orders based on the query
+        const ordersSnapshot = await getDocs(q);
         const ordersList = ordersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setOrders(ordersList);
       } catch (error) {
@@ -26,39 +31,26 @@ const OrderStatus = () => {
       }
     };
 
-    fetchOrders(); // Call the fetchOrders function inside useEffect without any dependencies
-  }, []); // Pass an empty dependency array to useEffect to ensure it runs only once
-
-  const handleAcceptPayment = async (orderId) => {
-    try {
-      const orderRef = doc(db, "orders", orderId);
-      await updateDoc(orderRef, { status: "Paid" });
-      // Remove the paid order from the orders state
-      setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
-    } catch (error) {
-      console.error("Error accepting payment: ", error);
-    }
-  };
+    fetchOrders();
+  }, [scannedData]); // Update orders whenever the scannedData changes
 
   return (
     <>
       <Header heading={"Status"} />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {orders.map((order, index) => (
+      {orders.map((order, index) => (
           <View key={index}>
             <View style={styles.infoContainer}>
-              <SectionTitle title={`Table No ${order.tableNumber}`} />
               <Text style={styles.status}>Status: {order.status}</Text>
             </View>
-            <Divider />
             <View style={styles.menuList}>
-              {order.menuItem && order.menuItem.map((item, itemIndex) => (
-                <Text key={itemIndex} style={styles.menuItem}>
-                  {item.menuName}
-                </Text>
+              {order.menuItems && order.menuItems.map((item, itemIndex) => (
+                <View key={itemIndex}>
+                  <Text style={styles.menuItem}>{item.id}</Text>
+                  <Text>Quantity: {item.quantity}</Text>
+                </View>
               ))}
-            </View>
-            
+              </View>
             <Divider />
           </View>
         ))}
@@ -101,17 +93,6 @@ const styles = StyleSheet.create({
   menuItem: {
     fontSize: 20,
     lineHeight: 41,
-  },
-  actionContainer: {
-    backgroundColor: "#E5687F",
-    alignSelf: "center",
-    marginTop: 115,
-    padding: 10,
-  },
-  actionText: {
-    color: "#000",
-    fontSize: 20,
-    fontFamily: "Radley",
   },
 });
 

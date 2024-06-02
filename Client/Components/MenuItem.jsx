@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Header from "./Header";
 import Footer from "./Footer";
-import { collection, getDocs, updateDoc, doc, addDoc } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc, addDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 export default function MyMenuItem({ route }) {
-  const { collectionName } = route.params;
+  const { collectionName, scannedData } = route.params; // scannedData is an integer here
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [tableNumber] = useState(Math.floor(Math.random() * 6) + 1);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -32,6 +31,20 @@ export default function MyMenuItem({ route }) {
     }
   };
 
+ {/* const createTableDocument = async () => {
+    try {
+      const tableRef = collection(db, "tables");
+      await setDoc(doc(tableRef, scannedData.toString()), {}); // Convert to string for document ID
+      console.log("Table document created successfully with ID: ", scannedData);
+    } catch (error) {
+      console.error("Error creating table document:", error);
+    }
+  };
+
+  useEffect(() => {
+    createTableDocument();
+  }, [scannedData]);
+*/}
   const handleIncrementQuantity = async (itemId) => {
     try {
       const itemRef = doc(db, collectionName, itemId);
@@ -49,16 +62,35 @@ export default function MyMenuItem({ route }) {
     }
   };
 
+  const handleDecrementQuantity = async (itemId) => {
+    try {
+      const itemRef = doc(db, collectionName, itemId);
+      const item = menuItems.find((item) => item.id === itemId);
+      if (item.quantity > 0) {
+        await updateDoc(itemRef, {
+          quantity: item.quantity - 1 // Decrementing quantity by 1
+        });
+        setMenuItems((prevItems) =>
+          prevItems.map((item) =>
+            item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error decrementing quantity:", error);
+    }
+  };
+
   const handlePlaceOrder = async () => {
     try {
       const orderRef = await addDoc(collection(db, "orders"), {
         menuItems: menuItems.filter(item => item.quantity > 0), // Only add items with quantity > 0
         createdAt: new Date(), // Add a timestamp for when the order was placed
-        tableNumber: tableNumber,
-        status: "Pending"
+        status: "Pending",
+        tableNumber: scannedData // Save scannedData as tableNumber
       });
       console.log("Order placed successfully with ID: ", orderRef.id);
-      Alert.alert("Order Placed", `Your order has been placed successfully at table number ${tableNumber}.`);
+      Alert.alert("Order Placed", `Your order has been placed successfully at table number ${scannedData}.`);
     } catch (error) {
       console.error("Error placing order:", error);
       Alert.alert("Order Failed", "There was an issue placing your order. Please try again.");
@@ -85,23 +117,33 @@ export default function MyMenuItem({ route }) {
               style={styles.image}
             />
             <View style={styles.detailsContainer}>
+            <Text style={styles.naming}>{menuItem.id}</Text>
               <Text style={styles.price}>€{menuItem.price}</Text>
-              <Text>{menuItem.ingredients}</Text>  
+              <Text style={styles.ing}>Ingredients: </Text>
+              <Text> {menuItem.ingredients}</Text>
               <Text style={styles.quantityText}>Quantity: {menuItem.quantity}</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.decrementButton}
+                  onPress={() => handleDecrementQuantity(menuItem.id)}
+                >
+                  <Text style={styles.decrementButtonText}>-</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.incrementButton}
+                  onPress={() => handleIncrementQuantity(menuItem.id)}
+                >
+                  <Text style={styles.incrementButtonText}>+</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity
-              style={styles.incrementButton}
-              onPress={() => handleIncrementQuantity(menuItem.id)}
-            >
-              <Text style={styles.incrementButtonText}>+</Text>
-            </TouchableOpacity>
           </View>
         ))}
-        <Text style={styles.tableText}>Table Number: {tableNumber}</Text>
+        <Text style={styles.tableText}>Table Number: {scannedData}</Text>
         <TouchableOpacity style={styles.orderButton} onPress={handlePlaceOrder}>
           <Text style={styles.orderButtonText}>Place an Order</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.statusButton} onPress={() => navigation.navigate('Status')}>
+        <TouchableOpacity style={styles.statusButton} onPress={() => navigation.navigate('OrderStatus', {scannedData: parseInt(scannedData, 10) })}>
           <Text style={styles.statusButtonText}>Check Order Status</Text>
         </TouchableOpacity>
       </View>
@@ -145,7 +187,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   price: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#C42626",
     marginBottom: 10,
@@ -155,14 +197,29 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     lineHeight: 20,
   },
+  naming:{
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#00008B",
+  },
   quantityText: {
     fontSize: 16,
+    fontWeight:"bold",
+    color: "#808080",
     marginBottom: 10,
+    paddingTop: 5,
   },
   tableText: {
     fontSize: 16,
     marginBottom: 10,
     color: "#0000ff",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    marginTop: 10,
   },
   incrementButton: {
     backgroundColor: "#78EEC4",
@@ -174,6 +231,23 @@ const styles = StyleSheet.create({
   incrementButtonText: {
     fontSize: 20,
     color: "#fff",
+  },
+  decrementButton: {
+    backgroundColor: "#E5687F",
+    borderRadius: 10,
+    padding: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  decrementButtonText: {
+    fontSize: 20,
+    color: "#fff",
+  },
+  ing:{
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "grey",
+
   },
   orderButton: {
     backgroundColor: "#78EEC4",

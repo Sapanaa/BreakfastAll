@@ -1,12 +1,14 @@
 import * as React from "react";
-import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase.config';
 import Header from "./Header";
 import Footer from "./Footer";
-//import { collection, doc, setDoc } from 'firebase/firestore';
-import { db } from '../firebase.config';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 function MyProfile() {
   const [nickname, setNickname] = React.useState('');
+  const navigation = useNavigation(); // Initialize useNavigation hook
 
   const handleEditProfile = () => {
     // Handle edit profile action
@@ -15,7 +17,7 @@ function MyProfile() {
 
   const handleSave = async () => {
     try {
-      const clientRef = doc(db, 'clients', 'unique_client_id'); 
+      const clientRef = doc(db, 'clients', 'unique_client_id');
       await setDoc(clientRef, { nickname }, { merge: true });
       console.log("Name saved successfully!");
     } catch (error) {
@@ -26,6 +28,13 @@ function MyProfile() {
   const handleRequestEmployee = () => {
     // Handle request employee action
     console.log("Request Employee clicked");
+    navigation.navigate('Request'); // Navigate to the 'RequestEmployee' screen
+  };
+
+  const handleleaveFeedback = () => {
+    // Handle request employee action
+    console.log("Handle Feedback");
+    navigation.navigate('Feedback'); // Navigate to the 'RequestEmployee' screen
   };
 
   return (
@@ -52,8 +61,16 @@ function MyProfile() {
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
           <View style={styles.employeeRequest}>
-            <Text style={styles.employeeText}>Check Order-History</Text>
+            <Text style={styles.employeeText}>Request Employee</Text>
             <TouchableOpacity style={styles.forwardButton} onPress={handleRequestEmployee}>
+              <Text style={styles.forwardButtonText}>&#10132;</Text>
+            </TouchableOpacity>
+            </View>
+          <View style={styles.employeeRequest}>
+
+            <Text style={styles.employeeText}>Leave Feedback</Text>
+
+            <TouchableOpacity style={styles.forwardButton} onPress={handleleaveFeedback}>
               <Text style={styles.forwardButtonText}>&#10132;</Text>
             </TouchableOpacity>
           </View>
@@ -70,7 +87,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 100,
     backgroundColor: "#fdeaea",
-
   },
   text: {
     color: "#B83838",
@@ -84,12 +100,6 @@ const styles = StyleSheet.create({
   greeting: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
     marginBottom: 20,
   },
   editProfile: {

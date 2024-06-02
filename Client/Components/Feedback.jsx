@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Header from "./Header";
 import { AirbnbRating } from "react-native-ratings";
-import { collection, addDoc, serverTimestamp, Firestore } from "firebase/firestore";
-import { db }from "../firebase.config"
+import { collection, addDoc, serverTimestamp, getDoc, doc } from "firebase/firestore";
+import { db } from "../firebase.config";
 
 const Feedback = () => {
   const [ratings, setRatings] = useState({
@@ -12,6 +12,28 @@ const Feedback = () => {
     ambiance: 0,
   });
 
+  const [isNicknameSaved, setIsNicknameSaved] = useState(false);
+  const [nickname, setNickname] = useState('');
+
+  // Function to retrieve the nickname from the 'clients' collection
+  const fetchNickname = async () => {
+    try {
+      const clientDoc = doc(db, 'clients', 'unique_client_id'); // Replace 'unique_client_id' with the actual ID of the client document
+      const clientSnapshot = await getDoc(clientDoc);
+      if (clientSnapshot.exists()) {
+        const data = clientSnapshot.data();
+        setNickname(data.nickname);
+        setIsNicknameSaved(true);
+      }
+    } catch (error) {
+      console.error("Error fetching nickname: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNickname(); // Fetch the nickname when the component mounts
+  }, []);
+
   const handleRatingChange = (field, rating) => {
     setRatings((prevRatings) => ({
       ...prevRatings,
@@ -19,14 +41,14 @@ const Feedback = () => {
     }));
   };
 
-  const handleRatingSubmit = async (isAnonymous) => {
-    console.log("handleRatingSubmit called with isAnonymous:", isAnonymous);
-    console.log("Current ratings:", ratings);
+  const handleRatingSubmit = async () => {
+    console.log("handleRatingSubmit called");
 
     try {
       const docRef = await addDoc(collection(db, 'feedback'), {
         ...ratings,
-        isAnonymous,
+        isAnonymous: !isNicknameSaved,
+        nickname: isNicknameSaved ? nickname : '', // Include the nickname if it's saved
         timestamp: serverTimestamp(),
       });
       console.log("Document written with ID: ", docRef.id);
@@ -75,13 +97,7 @@ const Feedback = () => {
         </View>
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={() => handleRatingSubmit(true)} // Submit Anonymously
-        >
-          <Text>Submit Anonymously</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.submitButton}
-          onPress={() => handleRatingSubmit(false)} // Submit with name
+          onPress={handleRatingSubmit}
         >
           <Text>Submit</Text>
         </TouchableOpacity>

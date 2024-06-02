@@ -25,6 +25,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "ios": {
+      "bundleIdentifier": "com.yourcompany.yourapp",
+      "permissions": [
+        "CAMERA",
+        {
+          "camera": {
+            "description": "Allow app to access the camera for scanning QR codes."
+          }
+        }
+      ]
     }
+    
   }
 }

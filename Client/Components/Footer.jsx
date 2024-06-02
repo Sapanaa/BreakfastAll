@@ -1,30 +1,36 @@
 // Footer.js
 
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native'; // Import Text component
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'; // Import the useNavigation hook
+import { useNavigation } from '@react-navigation/native';
 
 export default function Footer() {
-  const navigation = useNavigation(); // Initialize the navigation object
+  const navigation = useNavigation();
+
+  const handleProfileNavigation = () => {
+    navigation.navigate('Profile');
+  };
 
   const handleOrderStatusNavigation = () => {
-    navigation.navigate('OrderStatus'); // Navigate to the OrderStatus page
+    navigation.navigate('OrderStatus');
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.footer}>
-        <TouchableOpacity>
-          <MaterialIcons name="person" size={24} color="black" />
+        <TouchableOpacity onPress={handleProfileNavigation}>
+          {/* Wrap the MaterialIcons inside a Text component */}
+          <Text>
+            <MaterialIcons name="person" size={24} color="black" />
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity>
           <MaterialIcons name="home" size={24} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={handleOrderStatusNavigation}>
-          {/* Wrap the FontAwesome5 icon inside a Text component */}
           <Text>
             <FontAwesome5 name="concierge-bell" size={24} color="black" />
           </Text>
