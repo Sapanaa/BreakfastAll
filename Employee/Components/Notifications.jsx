@@ -31,8 +31,10 @@ const Notifications = () => {
         {notifications.map((notification, index) => (
           <NotificationCard
             key={index}
-            title={notification.title}
+            tableNumber = {notification.tableNumber}
             description={notification.description}
+            requestType={notification.requestType}
+            type={notification.type}
           />
         ))}
       </ScrollView>
@@ -41,11 +43,14 @@ const Notifications = () => {
   );
 };
 
-const NotificationCard = ({ title, description }) => {
+const NotificationCard = ({  tableNumber, description, requestType, type }) => {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>Table Number: {tableNumber}</Text>
+      
       <Text style={styles.description}>{description}</Text>
+      <Text style={styles.requestType}>Request Type: {requestType}</Text>
+      <Text style={styles.type}>Type: {type}</Text>
     </View>
   );
 };
@@ -83,6 +88,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
     color: "#555",
+  },
+  requestType: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: "#555",
+    marginTop: 8,
+  },
+  type: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: "#555",
+    marginTop: 8,
   },
 });
 

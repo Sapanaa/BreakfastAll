@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import Header from "./MostComp/Header";
 import Footer from "./MostComp/Footer";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 
 const SectionTitle = ({ title }) => (
@@ -19,7 +19,7 @@ const Status = () => {
       try {
         const ordersCollection = collection(db, "orders");
         const ordersSnapshot = await getDocs(ordersCollection);
-        const ordersList = ordersSnapshot.docs.map((doc) => doc.data());
+        const ordersList = ordersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setOrders(ordersList);
       } catch (error) {
         console.error("Error fetching orders: ", error);
@@ -28,6 +28,26 @@ const Status = () => {
 
     fetchOrders();
   }, []);
+
+  const acceptOrder = async (orderId) => {
+    try {
+      const orderRef = doc(db, "orders", orderId);
+      await updateDoc(orderRef, { status: "Accepted" });
+      setOrders(orders.map(order => order.id === orderId ? { ...order, status: "Accepted" } : order));
+    } catch (error) {
+      console.error("Error updating order status: ", error);
+    }
+  };
+
+  const deliverOrder = async (orderId) => {
+    try {
+      const orderRef = doc(db, "orders", orderId);
+      await updateDoc(orderRef, { status: "Delivered" });
+      setOrders(orders.map(order => order.id === orderId ? { ...order, status: "Delivered" } : order));
+    } catch (error) {
+      console.error("Error updating order status: ", error);
+    }
+  };
 
   return (
     <>
@@ -41,17 +61,27 @@ const Status = () => {
             </View>
             <Divider />
             <View style={styles.menuList}>
-              {order.menuItem.map((item, itemIndex) => (
-                <Text key={itemIndex} style={styles.menuItem}>
-                  {item.menuName}
-                </Text>
+              {order.menuItems && order.menuItems.map((item, itemIndex) => (
+                <View key={itemIndex}>
+                  <Text style={styles.menuItem}>{item.id}</Text>
+                  <Text>Quantity: {item.quantity}</Text>
+                </View>
               ))}
-            </View>
-            <TouchableOpacity>
-              <View style={styles.actionContainer}>
-                <Text style={styles.actionText}>Accept Payment</Text>
               </View>
-            </TouchableOpacity>
+            {order.status === "Pending" && (
+              <TouchableOpacity onPress={() => acceptOrder(order.id)}>
+                <View style={styles.actionContainer}>
+                  <Text style={styles.actionText}>Accept Order</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+            {order.status === "Accepted" && (
+              <TouchableOpacity onPress={() => deliverOrder(order.id)}>
+                <View style={styles.actionContainer}>
+                  <Text style={styles.actionText}>Delivered</Text>
+                </View>
+              </TouchableOpacity>
+            )}
             <Divider />
           </View>
         ))}
@@ -91,14 +121,17 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 44,
   },
+  menuItemContainer: {
+    marginBottom: 10,
+  },
   menuItem: {
     fontSize: 20,
-    lineHeight: 41,
+    lineHeight: 24,
   },
   actionContainer: {
     backgroundColor: "#E5687F",
     alignSelf: "center",
-    marginTop: 115,
+    marginTop: 20,
     padding: 10,
   },
   actionText: {
