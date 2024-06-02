@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import Header from "./Header";
 import { AirbnbRating } from "react-native-ratings";
 import { collection, addDoc, serverTimestamp, getDoc, doc } from "firebase/firestore";
@@ -14,6 +15,7 @@ const Feedback = () => {
 
   const [isNicknameSaved, setIsNicknameSaved] = useState(false);
   const [nickname, setNickname] = useState('');
+  const navigation = useNavigation();
 
   // Function to retrieve the nickname from the 'clients' collection
   const fetchNickname = async () => {
@@ -55,7 +57,7 @@ const Feedback = () => {
       Alert.alert("Success", "Feedback submitted successfully!", [
         {
           text: "OK",
-          onPress: () => console.log("OK Pressed"),
+          onPress: () => navigation.navigate('Goodbye'),  // Navigate to HomePage after submission
         },
       ]);
     } catch (e) {
@@ -101,7 +103,10 @@ const Feedback = () => {
         >
           <Text>Submit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.cancelButton}>
+        <TouchableOpacity 
+          style={styles.cancelButton}
+          onPress={() => navigation.goBack()}  // Navigate back on cancel
+        >
           <Text>Cancel</Text>
         </TouchableOpacity>
       </View>
