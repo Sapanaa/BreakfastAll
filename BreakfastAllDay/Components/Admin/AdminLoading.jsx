@@ -1,41 +1,52 @@
+// components/AdminLoading.js
+
 import React from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView } from "react-native";
-import Footer from "../Next.jsx/Footer";
-import Header from "../Next.jsx/Header";
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Adm from "../../assets/AdminIm.png";
+import Header from "../Next.jsx/Header";
 
-const NavigationItem = ({ title, onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.navigationItemContainer}>
-    <Text style={styles.navigationItemTitle}>{title}</Text>
-    <View style={styles.navigationArrowContainer}>
-      <Text style={styles.navigationArrow}>&gt;</Text>
-    </View>
-  </TouchableOpacity>
-);
+const NavigationItem = ({ title, screenName }) => {
+  const navigation = useNavigation();
+
+  const onPress = () => {
+    navigation.navigate(screenName);
+  };
+
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.navigationItemContainer}>
+      <Text style={styles.navigationItemTitle}>{title}</Text>
+      <View style={styles.navigationArrowContainer}>
+        <Text style={styles.navigationArrow}>&gt;</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const AdminLoading = () => {
   const navigationItems = [
-    { title: "Change Name", onPress: () => {} },
-    { title: "Update Logo", onPress: () => {} },
-    { title: "Change Number", onPress: () => {} },
-    { title: "Change Address", onPress: () => {} },
+    { title: "Change Name", screenName: "EditAccount" },
+    { title: "Update Logo", screenName: "EditAccount" },
+    { title: "Change Number", screenName: "EditAccount" },
+    { title: "Change Address", screenName: "EditAccount" },
   ];
   const navigationItem = [
-    { title: "Add Staff", onPress: () => {} },
-    { title: "Remove Staff", onPress: () => {} },
-    { title: "Disable Staff", onPress: () => {} },
-    { title: "View Evaluations", onPress: () => {} },
+    { title: "Add Staff", screenName: "StaffManagement" },
+    { title: "Remove Staff", screenName: "StaffManagement" },
+    { title: "Disable Staff", screenName: "StaffManagement" },
+    { title: "View Evaluations", screenName: "EmployeeEvaluation" },
   ];
 
   return (
     <>
-      <Header heading={'Edit Account'}/>
       <View style={styles.container}>
+         <Header heading={"Admin"}/>
         <LinearGradient
           colors={['#FBECF8', '#EFC3E8','#E297D6']}
           style={styles.linearGradient}
         >
+         
           <ScrollView contentContainerStyle={styles.scrollContainer} horizontal={false}>
             <View style={styles.contentContainer}>
               <Image
@@ -47,13 +58,13 @@ const AdminLoading = () => {
                 <Text style={styles.sectionTitle}>Configure Account</Text>
               </View>
               {navigationItems.map((item, index) => (
-                <NavigationItem key={index} title={item.title} onPress={item.onPress} />
+                <NavigationItem key={index} title={item.title} screenName={item.screenName} />
               ))}
               <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Manage Employee</Text>
               </View>
               {navigationItem.map((item, index) => (
-                <NavigationItem key={index} title={item.title} onPress={item.onPress} />
+                <NavigationItem key={index} title={item.title} screenName={item.screenName} />
               ))}
 
             </View>
@@ -61,7 +72,6 @@ const AdminLoading = () => {
           </ScrollView>
         </LinearGradient>
       </View>
-      <Footer/>
     </>
   );
 };
@@ -69,7 +79,6 @@ const AdminLoading = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 90,
   },
   linearGradient: {
     flex: 1,
@@ -130,14 +139,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#6C1368",
   },
-  footerContainer: {
-    height: 80,
-    width: "100%",
-    backgroundColor: "#F670C9",
-    borderRadius: 8,
-    marginTop: 16,
-  },
 });
 
 export default AdminLoading;
-
