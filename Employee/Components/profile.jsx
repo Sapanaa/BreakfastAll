@@ -18,12 +18,12 @@ const ProfileDetail = ({ label, value, onChangeText }) => (
   </View>
 );
 
-const MyProfile = () => {
+const MyProfile = ({route}) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const employeeId = "your_employee_id"; // Replace with actual employee ID
-
+  const employeeId = route.params.id; 
+  console.log(employeeId);
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
@@ -49,11 +49,11 @@ const MyProfile = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const docRef = doc(db, "employee", employeeId);
+      const docRef = doc(db, "Employee", employeeId);
       await updateDoc(docRef, {
-        username,
-        email,
-        phoneNumber,
+        username: username,
+        email: email,
+        phoneNumber: phoneNumber,
       });
       Alert.alert("Success", "Profile updated successfully.");
     } catch (error) {

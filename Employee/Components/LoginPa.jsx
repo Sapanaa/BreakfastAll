@@ -46,7 +46,7 @@ export default function Login({navigation}) {
       const response = signIn(email, password);
       if (response) {
         setLoggedIn(true);
-        navigation.navigate("Home");
+        navigation.navigate("Home", {id: email});
         Alert.alert('Login Successful', 'Welcome!', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
       } else {
         Alert.alert('Login Failed', 'Invalid email or password.', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);

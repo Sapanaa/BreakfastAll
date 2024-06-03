@@ -12,11 +12,11 @@ const menuItems = [
   {title: "Notification", screen: "notification"}
 ];
 
-const MenuItem = ({ item }) => {
+const MenuItem = ({ item, id }) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate(item.screen)}>
+    <TouchableOpacity onPress={() => navigation.navigate(item.screen, {id: id})}>
       <View style={styles.menuItem}>
         <View style={styles.menuItemTextContainer}>
           <Text style={styles.arr}>{item.title}</Text>
@@ -31,14 +31,15 @@ const MenuItem = ({ item }) => {
   );
 };
 
-const Home = () => {
+const Home = ({route}) => {
+  const id = route.params.id;
   return (
     <>
       <Header heading={"Home"} />
       <View style={styles.container}>
         <View style={styles.divider} />
         {menuItems.map((item, index) => (
-          <MenuItem key={index} item={item} />
+          <MenuItem key={index} item={item} id = {id}/>
         ))}
       </View>
       <Footer />
