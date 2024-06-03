@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import { db } from "../firebase.config";
 import { collection, getDocs, setDoc ,doc} from 'firebase/firestore';
 
+
 function MyMenu() {
   const [menuData, setMenuData] = React.useState([]);
   const navigation = useNavigation();
@@ -51,12 +52,14 @@ function MyMenu() {
       <View style={styles.container}>
         <Header heading={"Menu"} />
         <View style={styles.search}>
-          <Text style={styles.tableNumber}>Table Number: {scannedData}</Text>
           <TextInput style={styles.input} placeholderTextColor="#999" placeholder="Search" />
         </View>
-        <TouchableOpacity style={styles.requestButton} onPress={handleRequestEmployee}>
-        <Text style={styles.requestButtonText}>Request Employee</Text>
-      </TouchableOpacity>
+        <View style={styles.employeeRequest}>
+            <TouchableOpacity style={styles.forwardButton} onPress={handleRequestEmployee}>
+            <Text style={styles.employeeText}>Request Employee</Text>
+            </TouchableOpacity>
+          </View>
+        
         <Text style={styles.categories}>Brunch Shakes Yummies Desserts</Text>
         <View style={styles.container}>
           <FlatList
@@ -126,6 +129,26 @@ const styles = StyleSheet.create({
     color: "#333",
     width: 200,
   },
+  employeeRequest: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 20,
+    width: "100%",
+    backgroundColor: "pink",
+    padding: 7,
+    justifyContent: "center",
+    width: "500px",
+    borderRadius: 4,
+    marginTop: 8,
+
+  },
+  employeeText: {
+    fontSize: 18,
+    color: "#333",
+    textAlign: "center",
+  },
+
 });
 
 export default MyMenu;

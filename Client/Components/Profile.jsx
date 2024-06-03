@@ -1,41 +1,77 @@
 import * as React from "react";
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
-import { doc, setDoc } from 'firebase/firestore';
+import { View, StyleSheet, Text, TextInput, TouchableOpacity, Button, Image, ActivityIndicator, Alert } from "react-native";
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import Header from "./Header";
 import Footer from "./Footer";
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { useState, useEffect } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
 
 function MyProfile() {
-  const [nickname, setNickname] = React.useState('');
-  const navigation = useNavigation(); // Initialize useNavigation hook
+  const [nickname, setNickname] = useState('Guest');
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
-  const handleEditProfile = () => {
-    // Handle edit profile action
-    console.log("Edit Profile clicked");
+  const fetchNickname = async () => {
+    try {
+      const clientRef = doc(db, 'clients', 'unique_client_id');
+      const clientSnap = await getDoc(clientRef);
+      if (clientSnap.exists() && clientSnap.data().nickname) {
+        setNickname(clientSnap.data().nickname);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching nickname: ", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNickname();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
   };
 
   const handleSave = async () => {
     try {
       const clientRef = doc(db, 'clients', 'unique_client_id');
       await setDoc(clientRef, { nickname }, { merge: true });
-      console.log("Name saved successfully!");
+      Alert.alert("Profile saved successfully!");
+      fetchNickname(); // Fetch the nickname again after saving
     } catch (error) {
-      console.error("Error saving name: ", error);
+      console.error("Error saving profile: ", error);
+      Alert.alert("Error saving profile: ", error.message);
     }
   };
 
   const handleRequestEmployee = () => {
-    // Handle request employee action
-    console.log("Request Employee clicked");
-    navigation.navigate('Request'); // Navigate to the 'RequestEmployee' screen
+    navigation.navigate('Request');
   };
 
-  const handleleaveFeedback = () => {
-    // Handle request employee action
-    console.log("Handle Feedback");
-    navigation.navigate('Feedback'); // Navigate to the 'RequestEmployee' screen
+  const handleLeaveFeedback = () => {
+    navigation.navigate('Feedback');
   };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#B83838" />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -43,13 +79,12 @@ function MyProfile() {
       <View style={styles.container}>
         <View style={styles.content}>
           <View style={styles.greeting}>
-            <Text style={styles.text}>Hello Ana,</Text>
+            <Text style={styles.text}>Hello {nickname},</Text>
             <Text style={styles.text}>Welcome</Text>
           </View>
-          
-          <TouchableOpacity style={styles.editProfile} onPress={handleEditProfile}>
-            <Text style={styles.editProfileText}>Edit Picture</Text>
-          </TouchableOpacity>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
+
+          <Button title="Upload Picture" onPress={pickImage} />
           <TextInput
             style={styles.input}
             placeholder="Enter Nickname"
@@ -60,17 +95,10 @@ function MyProfile() {
           <TouchableOpacity style={styles.action} onPress={handleSave}>
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
+      
           <View style={styles.employeeRequest}>
-            <Text style={styles.employeeText}>Request Employee</Text>
-            <TouchableOpacity style={styles.forwardButton} onPress={handleRequestEmployee}>
-              <Text style={styles.forwardButtonText}>&#10132;</Text>
-            </TouchableOpacity>
-            </View>
-          <View style={styles.employeeRequest}>
-
             <Text style={styles.employeeText}>Leave Feedback</Text>
-
-            <TouchableOpacity style={styles.forwardButton} onPress={handleleaveFeedback}>
+            <TouchableOpacity style={styles.forwardButton} onPress={handleLeaveFeedback}>
               <Text style={styles.forwardButtonText}>&#10132;</Text>
             </TouchableOpacity>
           </View>
@@ -87,6 +115,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 100,
     backgroundColor: "#fdeaea",
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   text: {
     color: "#B83838",

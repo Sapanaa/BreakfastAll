@@ -14,8 +14,8 @@ export default function Footer() {
     navigation.navigate('Profile');
   };
 
-  const handleOrderStatusNavigation = () => {
-    navigation.navigate('OrderStatus');
+  const handleHomePageNavigation = () => {
+    navigation.navigate('HomePage');
   };
 
   return (
@@ -27,14 +27,12 @@ export default function Footer() {
             <MaterialIcons name="person" size={24} color="black" />
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialIcons name="home" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleOrderStatusNavigation}>
+        <TouchableOpacity onPress={handleHomePageNavigation}>
           <Text>
-            <FontAwesome5 name="concierge-bell" size={24} color="black" />
+          <MaterialIcons name="home" size={24} color="black" />
           </Text>
         </TouchableOpacity>
+
       </View>
     </View>
   );

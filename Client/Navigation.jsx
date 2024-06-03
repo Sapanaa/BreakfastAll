@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator();
 function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomePage">
+      <Stack.Navigator initialRouteName="Status">
         <Stack.Screen name="HomePage" component={MyHomePage} options={{ headerShown: false }} />
         <Stack.Screen name="History" component={MyOrderHistory} options={{ headerTitle: '', headerBackVisible: true }} />
 
