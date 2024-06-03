@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import Header from './MostComp/Header';
-import Footer from './MostComp/Footer';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase.config';
 
@@ -33,28 +32,23 @@ const DashBoard = () => {
   return (
     <>
       <Header heading="DashBoard" />
-      <View style={styles.dashboardContainer}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.activeOrdersContainer}>
           <Text style={styles.tex}>Active Orders</Text>
           {orders.map((order) => (
             <OrderInfo key={order.id} tableNumber={order.tableNumber} createdAt={order.createdAt} />
           ))}
         </View>
-      </View>
-      <Footer />
+      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  dashboardContainer: {
-    backgroundColor: "#f5e1e1",
-    maxWidth: 680,
-    width: '100%',
-    alignItems: 'center',
+  scrollViewContent: {
+    flexGrow: 1,
     justifyContent: 'center',
-    margin: '0 auto',
-    height: '100%',
+    alignItems: 'center',
   },
   activeOrdersContainer: {
     marginTop: 20,

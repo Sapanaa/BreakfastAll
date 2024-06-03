@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import Header from "./MostComp/Header";
-import Footer from "./MostComp/Footer";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config"; 
 
@@ -79,7 +78,6 @@ const Orders = () => {
           </View>
         </TouchableOpacity>
       </View>
-      <Footer />
     </>
   );
 };

@@ -4,15 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 export default function Header({ heading }) {
   return (
     <View style={styles.header}>
-      <TouchableOpacity
-  style={styles.backbtn}
-  onPress={() => {
-    // Navigate to the next page here
-    // Example: navigation.navigate('NextPage');
-  }}
->
-  <Text style={styles.back}>&lt;</Text>
-</TouchableOpacity>
+     
 <View style={styles.headin}> 
       <Text style={styles.heading}>{heading}</Text>
       </View>

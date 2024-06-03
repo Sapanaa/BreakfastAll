@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import Header from "./MostComp/Header";
-import Footer from "./MostComp/Footer";
+
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 
@@ -86,7 +86,6 @@ const Status = () => {
           </View>
         ))}
       </ScrollView>
-      <Footer />
     </>
   );
 };

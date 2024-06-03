@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import Header from "./MostComp/Header";
-import Footer from "./MostComp/Footer";
 import Proff from "../assets/Prof.png";
 import { db } from "../firebase.config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
@@ -82,7 +81,6 @@ const MyProfile = ({route}) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Footer />
     </>
   );
 };

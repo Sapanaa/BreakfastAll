@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Header from "./MostComp/Header";
-import Footer from "./MostComp/Footer";
+
 
 const menuItems = [
   { title: "Dashboard", screen: "Dashboard" },
@@ -42,7 +42,6 @@ const Home = ({route}) => {
           <MenuItem key={index} item={item} id = {id}/>
         ))}
       </View>
-      <Footer />
     </>
   );
 };
