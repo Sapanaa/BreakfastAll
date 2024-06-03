@@ -42,7 +42,7 @@ export default function Login({navigation}) {
     const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
   
-    const handleLogin = () => {
+  /*  const handleLogin = () => {
       const response = signIn(email, password);
       if (response) {
         setLoggedIn(true);
@@ -50,6 +50,16 @@ export default function Login({navigation}) {
         Alert.alert('Login Successful', 'Welcome!', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
       } else {
         Alert.alert('Login Failed', 'Invalid email or password.', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
+      }
+    };*/
+    const handleLogin = async () => {
+      try {
+        const response = await signIn(email, password);
+        setLoggedIn(true);
+        navigation.navigate("Home", { id: email });
+        Alert.alert('Login Successful', 'Welcome!', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
+      } catch (error) {
+        Alert.alert('Login Failed', error.message, [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
       }
     };
   return (
@@ -138,7 +148,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 2,
-    elevation: 5, // This elevation value is important for iOS shadow
+    elevation: 5, 
   },
   buttonWrapper: {
     borderRadius: 20,
@@ -149,8 +159,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 2,
-    elevation: 5, // This elevation value is important for iOS shadow
-    overflow: 'hidden', // Ensure shadow is clipped within the rounded border
+    elevation: 5, 
+    overflow: 'hidden', 
   },
   button: {
     paddingVertical: 12,
