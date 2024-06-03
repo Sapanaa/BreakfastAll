@@ -2,6 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
 import { useState } from 'react';
+import axios from 'axios';
+
+
+const API_KEY = 'AIzaSyArcWEPMgWNyUwmmJ8rn-uc41d_busPoBs';
+
 const GradientButton = ({ text, onPress }) => (
     <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
       <LinearGradient colors={['#8359E3', '#7D4EE5']} style={styles.button} start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}>
@@ -16,14 +21,32 @@ const InputField = ({ label }) => (
   </View>
 );
 
-export default function Login() {
+const signIn = async (email, password) => {
+  try {
+    const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, {
+      email,
+      password,
+      returnSecureToken: true
+    });
+    console.log('User signed in!', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Sign In Error:', error.response.data.error.message);
+    throw new Error(error.response.data.error.message);
+  }
+};
+
+
+export default function Login({navigation}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
   
     const handleLogin = () => {
-      if (email === 'admin@example.com' && password === 'password') {
+      const response = signIn(email, password);
+      if (response) {
         setLoggedIn(true);
+        navigation.navigate("Home", {id: email});
         Alert.alert('Login Successful', 'Welcome!', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
       } else {
         Alert.alert('Login Failed', 'Invalid email or password.', [{ text: 'OK', onPress: () => console.log('OK Pressed') }]);
@@ -143,5 +166,11 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     marginVertical: 20,
+  },
+  successText: {
+    color: 'green',
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 18,
   },
 });

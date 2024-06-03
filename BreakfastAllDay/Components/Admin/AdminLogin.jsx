@@ -1,36 +1,41 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase.config"; // Assuming you have configured Firebase
+import axios from 'axios';
 
-const Login = () => {
+
+const API_KEY = 'AIzaSyArcWEPMgWNyUwmmJ8rn-uc41d_busPoBs';
+
+const signIn = async (email, password) => {
+  try {
+    const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`, {
+      email,
+      password,
+      returnSecureToken: true
+    });
+    console.log('User signed in!', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Sign In Error:', error.response.data.error.message);
+    throw new Error(error.response.data.error.message);
+  }
+};
+
+const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
-      const userRef = doc(db, "users", email);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
-        if (userData.password === password) {
-          // Successful login
-          console.log("Login successful");
-          // Navigate to dashboard or perform any other action
-        } else {
-          // Incorrect password
-          Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
-        }
-      } else {
-        // User not found
-        Alert.alert('Login Failed', 'User not found. Please register or check your credentials.');
-      }
+    const response = await signIn(email, password);
+    if(response){
+      navigation.navigate("AdminLoad");
+    }
     } catch (error) {
       console.error('Error:', error);
       Alert.alert('Error', 'An unexpected error occurred. Please try again later.');
     }
   };
+
 
   return (
     <View style={styles.container}>
@@ -71,6 +76,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 36,
     paddingVertical: 75,
     alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontSize: 50,
@@ -78,12 +84,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000",
     paddingHorizontal: 20,
+    textAlign: "center",
   },
   inputContainer: {
     marginTop: 54,
-    alignItems: "center",
+    width: '100%',
   },
   label: {
+    fontSize: 17,
+    fontFamily: "Inder, sans-serif",
+    marginBottom: 8,
+    color: '#333',
+  },
+  input: {
     backgroundColor: "rgba(0, 0, 0, 0.04)",
     borderRadius: 30,
     padding: 10,
@@ -91,15 +104,9 @@ const styles = StyleSheet.create({
     fontFamily: "Inder, sans-serif",
     marginBottom: 20,
   },
-  password: {
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-    borderRadius: 30,
-    padding: 10,
-    fontSize: 17,
-    fontFamily: "Inder, sans-serif",
-  },
   loginButtonContainer: {
     marginTop: 20,
+    width: '100%',
     alignItems: "center",
   },
   loginButton: {
@@ -107,6 +114,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#7E74BB",
     paddingVertical: 10,
     paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   loginButtonText: {
     fontFamily: "Inika, sans-serif",
@@ -114,26 +124,6 @@ const styles = StyleSheet.create({
     color: "#FEFCFC",
     fontWeight: "700",
   },
-  divider: {
-    backgroundColor: "rgba(0, 0, 0, 0.10)",
-    marginTop: 20,
-    height: 1,
-    width: "100%",
-  },
-  enterButtonContainer: {
-    marginTop: 165,
-    alignItems: "center",
-  },
-  enterButtonText: {
-    borderRadius: 20,
-    backgroundColor: "#7E74BB",
-    color: "#FEFCFC",
-    paddingVertical: 9,
-    paddingHorizontal: 16,
-    fontSize: 20,
-    fontFamily: "Inika, sans-serif",
-    fontWeight: "700",
-  }
 });
 
 export default Login;
