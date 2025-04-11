@@ -6,8 +6,8 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: API_KEY,
   authDomain: AUTH_DOMAIN,
-  projectId: "t15-dm",
-  storageBucket: "t15-dm.appspot.com",
+  projectId: T15,
+  storageBucket: STOREBUCKET,
   messagingSenderId: MESEGESID,
   appId:APP_ID,
 };
