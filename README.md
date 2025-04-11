@@ -61,6 +61,6 @@ To run this project locally:
 ### 📞 Contact
 For any inquiries or collaboration, feel free to reach out:
 
-Email: your-email@example.com
+Email: sapanadhami1111@gmail.com
 
-GitHub: https://github.com/your-username
+GitHub: https://github.com/Sapanaa
