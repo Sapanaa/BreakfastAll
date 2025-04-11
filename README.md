@@ -55,5 +55,4 @@ To run this project locally:
    ```bash
    git clone https://github.com/your-username/BreakfastAllDay.git
    cd BreakfastAllDay
-```
 
