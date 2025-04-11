@@ -56,3 +56,11 @@ To run this project locally:
    git clone https://github.com/your-username/BreakfastAllDay.git
    cd BreakfastAllDay
 
+
+
+### 📞 Contact
+For any inquiries or collaboration, feel free to reach out:
+
+Email: your-email@example.com
+
+GitHub: https://github.com/your-username
