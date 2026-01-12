@@ -1,6 +1,7 @@
 # BreakfastAllDay 🍳🍽️
 
 Welcome to **BreakfastAllDay**! This is a mobile app built with **React Native** and **Expo** that allows employees and clients to interact seamlessly. It integrates QR code functionality for easy access and enhances the experience for both parties. The app is split into two main sections: **Employee** and **Client**.
+![Chat Interface](assets/Screenshot%202025-04-11%20131027.png)
 
 ## 🚀 Features
 
@@ -56,7 +57,9 @@ To run this project locally:
    git clone https://github.com/your-username/BreakfastAllDay.git
    cd BreakfastAllDay
 
-![image]https://github.com/Sapanna/BreakfastAll/blob/main/assets/login.png
+
+
+
 
 ### 📞 Contact
 For any inquiries or collaboration, feel free to reach out:
