@@ -2,6 +2,8 @@
 
 Welcome to **BreakfastAllDay**! This is a mobile app built with **React Native** and **Expo** that allows employees and clients to interact seamlessly. It integrates QR code functionality for easy access and enhances the experience for both parties. The app is split into two main sections: **Employee** and **Client**.
 ![Chat Interface](assets/Screenshot%202025-04-11%20131027.png)
+![Chat Interface](assets/Screenshot%202025-04-11%20131038.png)
+
 
 ## 🚀 Features
 
